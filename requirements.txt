@@ -27,3 +27,5 @@ six>=1.14
 joblib
 memoized-property
 termcolor
+fsspec     #needed to import csv files straight from the GCP
+gcsfs      #needed to import csv files straight from the GCP
