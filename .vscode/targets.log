@@ -6,10 +6,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun  2 11:05:48 2022
+# Make data base, printed on Thu Jun  2 18:50:49 2022
 
 # Variables
 
+# makefile (from 'Makefile', line 83)
+FILENAME = etl
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
@@ -32,8 +34,12 @@ VSCODE_LOG_NATIVE = false
 CURDIR := /home/yuka/code/mrdaraujo/business_case_869
 # makefile
 SHELL = /bin/sh
+# makefile (from 'Makefile', line 102)
+LOCAL_PATH = "model.joblib"
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
+# makefile (from 'Makefile', line 108)
+BUCKET_FILE_NAME = $(shell basename ${LOCAL_PATH})
 # environment
 _ = /mnt/c/Users/yukio/AppData/Local/Programs/Microsoft VS Code/bin/code
 # environment
@@ -58,12 +64,14 @@ LSCOLORS = Gxfxcxdxbxegedabagacad
 XDG_RUNTIME_DIR = /mnt/wslg/runtime-dir
 # environment
 VIRTUAL_ENV = /home/yuka/.pyenv/versions/3.8.12/envs/business_case_869
+# makefile (from 'Makefile', line 88)
+RUNTIME_VERSION = 1.15
 # environment
 VSCODE_LOG_STACK = false
 # environment
 PYENV_ROOT = /home/yuka/.pyenv
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-4d31941c-97b9-4eee-b16e-f99b42d97193.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-2d0f289d-e5ba-4f4e-a83f-b7bc050e12a4.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -83,11 +91,11 @@ PWD = /home/yuka/code/mrdaraujo/business_case_869
 # environment
 SSH_AGENT_PID = 117
 # environment
-WSL_INTEROP = /run/WSL/3155_interop
+WSL_INTEROP = /run/WSL/6572_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
-WT_SESSION = 0e92c104-1ec9-4e2b-9e5d-0bec858052e7
+WT_SESSION = 56ebfa35-5f8d-4d02-b5ec-3c43d06a9337
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -126,6 +134,8 @@ NAME = Code
 LESS = -R
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
+# makefile (from 'Makefile', line 86)
+PYTHON_VERSION = 3.7
 # environment
 VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/yukio/.vscode/extensions/ms-vscode-remote.remote-wsl-0.66.3
 # default
@@ -148,24 +158,32 @@ MFLAGS = -pqrR
 NVM_DIR = /home/yuka/.nvm
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
+# makefile (from 'Makefile', line 105)
+BUCKET_FOLDER = 'trainings_local'
 # automatic
 +F = $(notdir $+)
-# makefile (from 'Makefile', line 65)
+# makefile (from 'Makefile', line 69)
 REGION = southamerica-east1
 # makefile (from 'Makefile', line 62)
 BUCKET_NAME = business-case
 # environment
 VSCODE_HANDLES_SIGPIPE = true
+# makefile (from 'Makefile', line 82)
+PACKAGE_NAME = package
 # environment
 WT_PROFILE_ID = {2c4de342-38b7-51cf-b940-2309a097f518}
 # default
 MAKEFILES := 
 # automatic
 <F = $(notdir $<)
+# makefile (from 'Makefile', line 87)
+FRAMEWORK = scikit-learn
 # environment
 EDITOR = code
 # environment
 PAGER = less
+# environment
+DOCKER_IMAGE_NAME = image_bc869
 # environment
 LC_ALL = C
 # environment
@@ -186,18 +204,22 @@ PROJECT_ID = wagon-businesscase-869
 PYENV_VIRTUALENV_INIT = 1
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile (from 'Makefile', line 79)
+JOB_NAME = business_case_869_$(shell date +'%Y%m%d_%H%M%S')
 # default
 .RECIPEPREFIX := 
 # environment
 LANG = C
 # environment
 TERM = xterm-256color
+# makefile (from 'Makefile', line 66)
+BUCKET_TRAINING_FOLDER = 'trainings'
 # environment
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 # environment
 WSL_DISTRO_NAME = Ubuntu
 # variable set hash-table stats:
-# Load=93/1024=9%, Rehash=0, Collisions=6/130=5%
+# Load=104/1024=10%, Rehash=0, Collisions=6/133=5%
 
 # Pattern-specific Variable Values
 
@@ -205,31 +227,15 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 2080, inode 44125): 20 files, no impossibilities.
+# . (device 2080, inode 44125): 23 files, no impossibilities.
 
-# 20 files, no impossibilities in 1 directories.
+# 23 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
 # No implicit rules.
 
 # Files
-
-training: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-# Not a target:
-.:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-ai-platform: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
 
 black:
 #  Implicit rule search has not been done.
@@ -247,12 +253,6 @@ all: clean install test black check_code
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/3=0%
 
-# Not a target:
---stream-logs:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
 install_requirements:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -260,23 +260,11 @@ install_requirements:
 #  recipe to execute (from 'Makefile', line 5):
 	@pip install -r requirements.txt
 
-gcloud: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-# Not a target:
---runtime-version=:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
 pypi:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 55):
- 
 	@twine upload dist/* -u $(PYPI_USERNAME)
 
 # Not a target:
@@ -286,27 +274,12 @@ pypi:
 #  File has not been updated.
 
 # Not a target:
---python-version=:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-# Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-02 11:04:44.393723436
+ 
+#  Last modified 2022-06-02 15:03:45.613804621
 #  File has been updated.
 #  Successfully updated.
-
-submit: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-jobs: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
 
 test:
 #  Implicit rule search has not been done.
@@ -316,6 +289,20 @@ test:
 	@coverage run -m pytest tests/*.py
 	@coverage report -m --omit="${VIRTUAL_ENV}/lib/python*"
 
+gcp_submit_training:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 91):
+	gcloud ai-platform jobs submit training ${JOB_NAME} \
+			--job-dir gs://${BUCKET_NAME}/${BUCKET_TRAINING_FOLDER}  \
+			--package-path ${PACKAGE_NAME} \
+			--module-name ${PACKAGE_NAME}.${FILENAME} \
+			--python-version=${PYTHON_VERSION} \
+			--runtime-version=${RUNTIME_VERSION} \
+			--region ${REGION} \
+			--stream-logs
+
 build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -323,17 +310,18 @@ build:
 #  recipe to execute (from 'Makefile', line 49):
 	@python setup.py sdist bdist_wheel
 
-# Not a target:
---package-path:
+upload_data:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+#  recipe to execute (from 'Makefile', line 112):
+	@gsutil cp ${LOCAL_PATH} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME}
 
 set_project:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 68):
+#  recipe to execute (from 'Makefile', line 72):
 	@gcloud config set project ${PROJECT_ID}
 
 check_code:
@@ -364,16 +352,11 @@ count_lines:
 #  Modification time never checked.
 #  File has not been updated.
 
---job-dir: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
 create_bucket:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 71):
+#  recipe to execute (from 'Makefile', line 75):
 	@gsutil mb -l ${REGION} -p ${PROJECT_ID} gs://${BUCKET_NAME}
 
 clean:
@@ -408,23 +391,6 @@ clean:
 	@rm -fr business_case_869-*.dist-info
 	@rm -fr business_case_869.egg-info
 
-# Not a target:
-//business-case/:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-# Not a target:
-southamerica-east1:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
-gs: //business-case/ --package-path --module-name . --python-version= --runtime-version= --region southamerica-east1 --stream-logs
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-
 ftest:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -439,17 +405,12 @@ pypi_test:
 #  recipe to execute (from 'Makefile', line 52):
 	@twine upload -r testpypi dist/* -u $(PYPI_USERNAME)
 
-# Not a target:
---module-name:
+run_api:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-
-# Not a target:
---region:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 115):
+	uvicorn api.fast:app --reload  # load web server with code autoreload
 
 install:
 #  Implicit rule search has not been done.
@@ -459,19 +420,19 @@ install:
 	@pip install . -U
 
 # files hash-table stats:
-# Load=33/1024=3%, Rehash=0, Collisions=0/59=0%
+# Load=20/1024=2%, Rehash=0, Collisions=0/37=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 52 / storage = 536 B / avg = 10 B
-# current buf: size = 8162 B / used = 536 B / count = 52 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 43 / storage = 420 B / avg = 9 B
+# current buf: size = 8162 B / used = 420 B / count = 43 / avg = 9 B
 
-# strcache performance: lookups = 86 / hit rate = 39%
+# strcache performance: lookups = 72 / hit rate = 40%
 # hash-table stats:
-# Load=52/8192=1%, Rehash=0, Collisions=1/86=1%
-# Finished Make data base on Thu Jun  2 11:05:48 2022
+# Load=43/8192=1%, Rehash=0, Collisions=1/72=1%
+# Finished Make data base on Thu Jun  2 18:50:49 2022
 
  

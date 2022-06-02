@@ -1,3 +1,4 @@
+from h11 import Data
 import pandas as pd
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
@@ -71,4 +72,5 @@ def Pipe(X_train, y_train):
 
 if __name__ == '__main__':
     X_train, y_train = DataTrain()
+    X_predict = DataPredict()
     pipe = Pipe(X_train, y_train)
