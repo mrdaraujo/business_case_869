@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Jun  2 18:50:49 2022
+# Make data base, printed on Thu Jun  2 18:58:53 2022
 
 # Variables
 
@@ -71,7 +71,7 @@ VSCODE_LOG_STACK = false
 # environment
 PYENV_ROOT = /home/yuka/.pyenv
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-2d0f289d-e5ba-4f4e-a83f-b7bc050e12a4.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-a1254e46-53e7-4206-8b6d-143c338f4df7.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -107,7 +107,7 @@ LOGNAME = yuka
 # environment
 BUNDLER_EDITOR = code
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 PYTHONBREAKPOINT = ipdb.set_trace
 # environment
@@ -277,7 +277,7 @@ pypi:
 Makefile:
 #  Implicit rule search has been done.
  
-#  Last modified 2022-06-02 15:03:45.613804621
+#  Last modified 2022-06-02 18:57:06.343883878
 #  File has been updated.
 #  Successfully updated.
 
@@ -433,6 +433,6 @@ install:
 # strcache performance: lookups = 72 / hit rate = 40%
 # hash-table stats:
 # Load=43/8192=1%, Rehash=0, Collisions=1/72=1%
-# Finished Make data base on Thu Jun  2 18:50:49 2022
+# Finished Make data base on Thu Jun  2 18:58:53 2022
 
  
