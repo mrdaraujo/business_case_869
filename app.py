@@ -83,12 +83,51 @@ if len(array_city_selection_store) > 1 :
         st.write("The chart above shows evolution on sales for city ", city_selection,
                 " for the ",len(array_city_selection_store),
                 " stores from 2013 to 2016 ")
+
+        #fig, ax = plt.subplots()
+        #ax.bar(data_selection_bycity['store_nbr'].astype("string"),data_selection_bycity['sales'])
+        #st.pyplot(fig)
+
+        plt.style.use('_mpl-gallery')
+
+        # make the data
+        x = data_selection_bycity['store_nbr']
+        y = data_selection_bycity['sales']
+        # size and color:
+        sizes = np.random.uniform(15, 80, len(x))
+        colors = np.random.uniform(15, 80, len(x))
+
+        # plot
         fig, ax = plt.subplots()
-        ax.bar(data_selection_bycity['store_nbr'].astype("string"),data_selection_bycity['sales'])
+        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
+        ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
+        ylim=(0, 8), yticks=np.arange(1, 8))
         st.pyplot(fig)
+        #plt.show()
+
+
+
+
+
+
+
+
+
+
 elif len(array_city_selection_store) == 1 :
     st.write('There is only one store in the city that has sold ',int(data_selection_bycity['sales'].sum()),
                     ' products from 2013 to 2016')
+
+
+
+
+
+
+
+
+
+
+
 
 #Plot sales of each year for the selected city and store
 st.text("Sales of each year for the selected city and store")
@@ -178,10 +217,34 @@ with st.expander("Expand to have more details: "):
         data_selection_fam_2016_bycity_bystore['store_nbr'] == store_selection]
     data_selection_fam_2016_bycity_bystore = data_selection_fam_2016_bycity_bystore.groupby(['family'])['sales'].sum().reset_index()
 
-    fig, axs = plt.subplots(4)
-    #fig.suptitle('Vertically stacked subplots')
-    axs[0].bar(data_selection_fam_2013_bycity_bystore['family'], data_selection_fam_2013_bycity_bystore['sales'])
-    axs[1].bar(data_selection_fam_2014_bycity_bystore['family'], data_selection_fam_2014_bycity_bystore['sales'])
-    axs[2].bar(data_selection_fam_2015_bycity_bystore['family'], data_selection_fam_2015_bycity_bystore['sales'])
-    axs[3].bar(data_selection_fam_2016_bycity_bystore['family'], data_selection_fam_2016_bycity_bystore['sales'])
+    #fig, axs = plt.subplots(4)
+    ##fig.suptitle('Vertically stacked subplots')
+    #axs[0].plot(data_selection_fam_2013_bycity_bystore['family'], data_selection_fam_2013_bycity_bystore['sales'])
+    #axs[1].plot(data_selection_fam_2014_bycity_bystore['family'], data_selection_fam_2014_bycity_bystore['sales'])
+    #axs[2].plot(data_selection_fam_2015_bycity_bystore['family'], data_selection_fam_2015_bycity_bystore['sales'])
+    #axs[3].plot(data_selection_fam_2016_bycity_bystore['family'], data_selection_fam_2016_bycity_bystore['sales'])
+    #st.pyplot(fig)
+
+
+    fig, ax = plt.subplots()
+
+    # Plotting the curves in the same graph
+    plt.plot(data_selection_fam_2013_bycity_bystore['family'],
+             data_selection_fam_2013_bycity_bystore['sales'], color='r', label='2013')
+
+    plt.plot(data_selection_fam_2014_bycity_bystore['family'],
+             data_selection_fam_2014_bycity_bystore['sales'], color='g', label='2014')
+
+    plt.plot(data_selection_fam_2015_bycity_bystore['family'],
+             data_selection_fam_2015_bycity_bystore['sales'], color='blue', label='2015')
+
+    plt.plot(data_selection_fam_2016_bycity_bystore['family'],
+             data_selection_fam_2016_bycity_bystore['sales'], color='black', label='2016')
+
+    plt.xticks(rotation=90)
+    plt.xlabel("Family")
+    plt.ylabel("Sales")
+    plt.title("Comparison of sales for selected store")
+    plt.legend()
+
     st.pyplot(fig)
