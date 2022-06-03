@@ -1,13 +1,12 @@
-from h11 import Data
 import pandas as pd
+import numpy as np
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.linear_model import Ridge, LinearRegression
+from sklearn.linear_model import LinearRegression
 import joblib
 
 # set for fetching and merging data
-
 def DataMerging(csv_left, csv_stores):
     ''' function for merging stores dataset to train/test '''
     csv_stores = csv_stores[['store_nbr','city']]
@@ -27,6 +26,7 @@ def DataTrain():
     csv_stores = pd.read_csv(path+"stores.csv")
     df = DataMerging(csv_left, csv_stores)
     df.loc[df['sales']==0,'sales'] = 0.1
+    df['sales'] = np.log(df['sales'])
     X_train = df.drop(columns='sales')
     y_train = df['sales']
 
@@ -44,7 +44,6 @@ def DataPredict():
 
 
 # full pipeline set
-
 def Preproc():
     ''' function for preprocessing'''
     # num_transformer = Pipeline([
@@ -63,14 +62,22 @@ def Preproc():
 
 def Pipe(X_train, y_train):
     ''' function for training model'''
-    pipeline = make_pipeline(Preproc(), LinearRegression())
+
+    preprocessor = Preproc()
+    pipeline = make_pipeline(preprocessor, LinearRegression())
     pipeline.fit(X_train, y_train)
-    joblib.dump(pipeline, 'model.joblib')
+    joblib.dump(pipeline, 'model_baseline.joblib')
 
-    return pipeline
+    return pipeline, preprocessor
 
+def TrainBaseline():
+    X_train, y_train = DataTrain()
+    X_predict = DataPredict()
+    pipe, preprocessor = Pipe(X_train, y_train)
+
+    return X_train, y_train, X_predict, pipe, preprocessor
 
 if __name__ == '__main__':
     X_train, y_train = DataTrain()
     X_predict = DataPredict()
-    pipe = Pipe(X_train, y_train)
+    pipe, preprocessor = Pipe(X_train, y_train)
