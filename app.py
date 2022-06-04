@@ -1,5 +1,7 @@
+from sys import base_prefix
 import streamlit as st
 import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 import datetime
 
@@ -25,6 +27,7 @@ data_train_merge_stores['date'] = pd.to_datetime(data_train_merge_stores['date']
 data_baseline = data_train_merge_stores
 data_baseline['month'] = data_baseline['date'].dt.month
 data_baseline['year'] = data_baseline['date'].dt.year
+data_baseline = data_baseline[data_baseline['year']<2017]
 
 
 # Create a block on the left - Selection
@@ -49,7 +52,7 @@ with st.sidebar:
     #Retrieve information from number of store
     array_city_selection_store = np.array(data_stores.loc[data_stores['city'] == city_selection, 'store_nbr'])
     st.write ('Your city has ',len(array_city_selection_store),
-    ' out of 54 store')
+    ' out of 54 stores')
     percentage = (len(array_city_selection_store)/Const_Store_nbr)*100
     percentage = round(percentage, 2)
     st.write('Your city has ',percentage , '% of stores')
@@ -67,6 +70,40 @@ with st.sidebar:
     st.write('Selected family:')
     st.table(family_selection)
 
+# Create a first part for analysis on city and store
+st.header("1)Analysis on city and store")
+data_selection_bycity = data_baseline[data_baseline['city'] == city_selection]
+data_selection_bycity = pd.DataFrame(data_selection_bycity.groupby(['store_nbr'])['sales'].sum()).reset_index()
+
+
+if len(array_city_selection_store) > 1 :
+    # Plot sales of each store for the selected city
+    st.text("Sales of each store for the selected city")
+    with st.expander("Expand to have more details: "):
+        st.write("The chart above shows evolution on sales for city ", city_selection,
+                " for the ",len(array_city_selection_store),
+                " stores from 2013 to 2016 ")
+
+        #fig, ax = plt.subplots()
+        #ax.bar(data_selection_bycity['store_nbr'].astype("string"),data_selection_bycity['sales'])
+        #st.pyplot(fig)
+
+        plt.style.use('_mpl-gallery')
+
+        # make the data
+        x = data_selection_bycity['store_nbr']
+        y = data_selection_bycity['sales']
+        # size and color:
+        sizes = np.random.uniform(15, 80, len(x))
+        colors = np.random.uniform(15, 80, len(x))
+
+        # plot
+        fig, ax = plt.subplots()
+        ax.scatter(x, y, s=sizes, c=colors, vmin=0, vmax=100)
+        ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
+        ylim=(0, 8), yticks=np.arange(1, 8))
+        st.pyplot(fig)
+        #plt.show()
 
 
 
@@ -75,49 +112,139 @@ with st.sidebar:
 
 
 
-# Create 2 columns in the middle - Analysis and Prediction
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown("Analysis")
-    st.write(city_selection)
-    st.image("/Users/farahboukitab/Desktop/Favorita logo.png")
-
-with col2:
-    st.markdown("Prediction")
 
 
-'''
-# this slider allows the user to select a number of lines
-# to display in the dataframe
-# the selected value is returned by st.slider
-line_count = st.slider('Select a line count', 1, 100000, 100)
-# and used in order to select the displayed lines
-display_df = data_baseline.head(line_count)
-display_df
-
-#import streamlit as st
-
-# Using object notation
-add_selectbox = st.sidebar.selectbox(
-    "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone")
-)
-st.write(add_selectbox)
-
-# Using "with" notation
-with st.sidebar:
-    add_radio = st.radio(
-        "Choose a shipping method",
-        ("Standard (5-15 days)", "Express (2-5 days)")
-    )
+elif len(array_city_selection_store) == 1 :
+    st.write('There is only one store in the city that has sold ',int(data_selection_bycity['sales'].sum()),
+                    ' products from 2013 to 2016')
 
 
-st.bar_chart({"data": [1, 5, 2, 6, 2, 1]})
 
-with st.expander("See explanation"):
-     st.write("""
-         The chart above shows some numbers I picked for you.
-         I rolled actual dice for these, so they're *guaranteed* to
-         be random.
-     """)
-     st.image("https://static.streamlit.io/examples/dice.jpg")'''
+
+
+
+
+
+
+
+
+
+#Plot sales of each year for the selected city and store
+st.text("Sales of each year for the selected city and store")
+with st.expander("Expand to have more details: "):
+    st.write("The chart above shows evolution on sales for store number ",store_selection, " from year 2013 to 2016")
+
+    data_selection_bycity_bystore = data_baseline[data_baseline['city'] == city_selection]
+    data_selection_bycity_bystore = data_selection_bycity_bystore[data_selection_bycity_bystore['store_nbr'] == store_selection]
+    data_selection_bycity_bystore = data_selection_bycity_bystore.groupby(['year'])['sales'].sum().reset_index()
+
+    fig, ax = plt.subplots()
+    ax.plot(data_selection_bycity_bystore['year'].astype("string"),data_selection_bycity_bystore['sales'])
+    st.pyplot(fig)
+
+#Plot sales for the selected year, store and city
+st.text("Sales for the selected year and store")
+with st.expander("Expand to have more details: "):
+    st.write("The chart above shows evolution on sales for store number ",store_selection, " for year ",
+                 date_selection.year)
+
+    data_selection_bymonth_bystore = data_baseline[data_baseline['year'] == date_selection.year]
+
+    data_selection_bymonth_bystore = data_selection_bymonth_bystore[
+            data_selection_bymonth_bystore['city'] == city_selection]
+
+    data_selection_bymonth_bystore = data_selection_bymonth_bystore[
+            data_selection_bymonth_bystore['store_nbr'] == store_selection]
+
+    data_selection_bymonth_bystore = data_selection_bymonth_bystore.groupby(['month'])['sales'].sum().reset_index()
+
+    fig, ax = plt.subplots()
+    ax.plot(data_selection_bymonth_bystore['month'].astype("string"),data_selection_bymonth_bystore['sales'])
+    st.pyplot(fig)
+
+
+
+#Create a second part to analyse family
+st.header("2)Analysis on family")
+
+data_selection_byfamily = data_baseline[data_baseline['city'] == city_selection]
+data_selection_byfamily = pd.DataFrame(data_selection_byfamily.groupby(['family'])['sales'].sum()).reset_index()
+# Plot sales of each family for the selected city
+st.text("Sales of each family for the selected city")
+with st.expander("Expand to have more details: "):
+    st.write("The chart above shows evolution on sales for 33 families from 2013 to 2016 ")
+    fig, ax = plt.subplots()
+    plt.xticks(rotation=90)
+    ax.bar(data_selection_byfamily['family'],data_selection_byfamily['sales'])
+    st.pyplot(fig)
+
+
+#Plot family of each year for the selected city and store
+st.text("Sales for the selected city and store for all families each year")
+with st.expander("Expand to have more details: "):
+    #4 plots for 2013, 2014, 2015 and 2016 for all families for 1 city and 1 store
+    st.write("The charts above show evolution on sales for store number ",store_selection, " for year 2013,2014,2015 and 2016")
+
+    #2013
+    data_selection_fam_2013_bycity_bystore = data_baseline[data_baseline['year'] == 2013]
+    data_selection_fam_2013_bycity_bystore = data_selection_fam_2013_bycity_bystore[
+        data_selection_fam_2013_bycity_bystore['city'] == city_selection]
+    data_selection_fam_2013_bycity_bystore = data_selection_fam_2013_bycity_bystore[
+        data_selection_fam_2013_bycity_bystore['store_nbr'] == store_selection]
+    data_selection_fam_2013_bycity_bystore = data_selection_fam_2013_bycity_bystore.groupby(['family'])['sales'].sum().reset_index()
+
+    #2014
+    data_selection_fam_2014_bycity_bystore = data_baseline[data_baseline['year'] == 2014]
+    data_selection_fam_2014_bycity_bystore = data_selection_fam_2014_bycity_bystore[
+        data_selection_fam_2014_bycity_bystore['city'] == city_selection]
+    data_selection_fam_2014_bycity_bystore = data_selection_fam_2014_bycity_bystore[
+        data_selection_fam_2014_bycity_bystore['store_nbr'] == store_selection]
+    data_selection_fam_2014_bycity_bystore = data_selection_fam_2014_bycity_bystore.groupby(['family'])['sales'].sum().reset_index()
+
+   #2015
+    data_selection_fam_2015_bycity_bystore = data_baseline[data_baseline['year'] == 2015]
+    data_selection_fam_2015_bycity_bystore = data_selection_fam_2015_bycity_bystore[
+        data_selection_fam_2015_bycity_bystore['city'] == city_selection]
+    data_selection_fam_2015_bycity_bystore = data_selection_fam_2015_bycity_bystore[
+        data_selection_fam_2015_bycity_bystore['store_nbr'] == store_selection]
+    data_selection_fam_2015_bycity_bystore = data_selection_fam_2015_bycity_bystore.groupby(['family'])['sales'].sum().reset_index()
+
+  #2016
+    data_selection_fam_2016_bycity_bystore = data_baseline[data_baseline['year'] == 2016]
+    data_selection_fam_2016_bycity_bystore = data_selection_fam_2016_bycity_bystore[
+        data_selection_fam_2016_bycity_bystore['city'] == city_selection]
+    data_selection_fam_2016_bycity_bystore = data_selection_fam_2016_bycity_bystore[
+        data_selection_fam_2016_bycity_bystore['store_nbr'] == store_selection]
+    data_selection_fam_2016_bycity_bystore = data_selection_fam_2016_bycity_bystore.groupby(['family'])['sales'].sum().reset_index()
+
+    #fig, axs = plt.subplots(4)
+    ##fig.suptitle('Vertically stacked subplots')
+    #axs[0].plot(data_selection_fam_2013_bycity_bystore['family'], data_selection_fam_2013_bycity_bystore['sales'])
+    #axs[1].plot(data_selection_fam_2014_bycity_bystore['family'], data_selection_fam_2014_bycity_bystore['sales'])
+    #axs[2].plot(data_selection_fam_2015_bycity_bystore['family'], data_selection_fam_2015_bycity_bystore['sales'])
+    #axs[3].plot(data_selection_fam_2016_bycity_bystore['family'], data_selection_fam_2016_bycity_bystore['sales'])
+    #st.pyplot(fig)
+
+
+    fig, ax = plt.subplots()
+
+    # Plotting the curves in the same graph
+    plt.plot(data_selection_fam_2013_bycity_bystore['family'],
+             data_selection_fam_2013_bycity_bystore['sales'], color='r', label='2013')
+
+    plt.plot(data_selection_fam_2014_bycity_bystore['family'],
+             data_selection_fam_2014_bycity_bystore['sales'], color='g', label='2014')
+
+    plt.plot(data_selection_fam_2015_bycity_bystore['family'],
+             data_selection_fam_2015_bycity_bystore['sales'], color='blue', label='2015')
+
+    plt.plot(data_selection_fam_2016_bycity_bystore['family'],
+             data_selection_fam_2016_bycity_bystore['sales'], color='black', label='2016')
+
+    plt.xticks(rotation=90)
+    plt.xlabel("Family")
+    plt.ylabel("Sales")
+    plt.title("Comparison of sales for selected store")
+    plt.legend()
+
+    st.pyplot(fig)
