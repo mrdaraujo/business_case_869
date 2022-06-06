@@ -22,7 +22,7 @@ app.add_middleware(
 
 @app.get("/")
 def index():
-    return dict(greeting="hello test")
+    return dict(greeting="welcome to bc869 api")
 
 @app.get("/predict-single")
 def predict(year,
@@ -167,7 +167,7 @@ def predict(year: Union[List[str], None] = Query(default=None),
     # convert response from numpy to python type
     pred = dict(enumerate(results.flatten(), 1))
 
-    return dict(sales_baseline_year=pred)
+    return dict(sales_store_year=pred)
 
 @app.get("/predict-family-year")
 def predict(year: Union[List[str], None] = Query(default=None),
@@ -208,4 +208,4 @@ def predict(year: Union[List[str], None] = Query(default=None),
     # convert response from numpy to python type
     pred = dict(enumerate(results.flatten(), 1))
 
-    return dict(sales_baseline_year=pred)
+    return dict(sales_family_year=pred)

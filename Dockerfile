@@ -2,7 +2,7 @@ FROM python:3.8.6-buster
 
 COPY api /api
 COPY package /package
-COPY model_baseline /model_baseline.joblib
+COPY model_baseline.joblib /model_baseline.joblib
 COPY model_city.joblib /model_city.joblib
 COPY model_family.joblib /model_family.joblib
 COPY model_store.joblib /model_store.joblib
