@@ -41,7 +41,7 @@ def predict(year,
             ))
 
     # pipeline = get_model_from_gcp()
-    pipe = joblib.load('model.joblib')
+    pipe = joblib.load('model_baseline.joblib')
 
     # make prediction and convert log back to number
     results = pipe.predict(X)
@@ -55,12 +55,13 @@ def predict(year,
 
     return dict(sales=pred)
 
-@app.get("/predict-year")
+@app.get("/predict-baseline-year")
 def predict(year: Union[List[str], None] = Query(default=None),
             month: Union[List[str], None] = Query(default=None),
             family: Union[List[str], None] = Query(default=None),
             store_nbr: Union[List[str], None] = Query(default=None),
-            onpromotion: Union[List[str], None] = Query(default=None)):
+            onpromotion: Union[List[str], None] = Query(default=None)
+        ):
 
     query_items = {
             'year': year,
@@ -82,14 +83,129 @@ def predict(year: Union[List[str], None] = Query(default=None),
     #X = pd.DataFrame(query_items)
 
     # pipeline = get_model_from_gcp()
-    pipe = joblib.load('model.joblib')
+    pipe = joblib.load('model_baseline.joblib')
 
+    #breakpoint()
     # make prediction
     results = pipe.predict(X).tolist()
-    results = [np.exp(i) for i in results]
+    results = [np.around(np.exp(i),decimals=2) for i in results]
     results = np.array(results)
 
     # convert response from numpy to python type
     pred = dict(enumerate(results.flatten(), 1))
 
-    return pred
+    return dict(sales_baseline_year=pred)
+
+@app.get("/predict-city-year")
+def predict(year: Union[List[str], None] = Query(default=None),
+            month: Union[List[str], None] = Query(default=None),
+            city: Union[List[str], None] = Query(default=None)
+        ):
+
+    query_items = {
+            'year': year,
+            'month': month,
+            'city': city
+        }
+
+    # build X ⚠️ beware to the order of the parameters ⚠️
+    X = pd.DataFrame(dict(
+                year=[int(i) for i in query_items['year']],
+                month=[int(i) for i in query_items['month']],
+                city=[str(i) for i in query_items['city']]
+            ))
+
+    #X = pd.DataFrame(query_items)
+
+    # pipeline = get_model_from_gcp()
+    pipe = joblib.load('model_city.joblib')
+
+    #breakpoint()
+    # make prediction
+    results = pipe.predict(X).tolist()
+    results = [np.around(np.exp(i),decimals=2) for i in results]
+    results = np.array(results)
+
+    # convert response from numpy to python type
+    pred = dict(enumerate(results.flatten(), 1))
+
+    return dict(sales_city_year=pred)
+
+@app.get("/predict-store-year")
+def predict(year: Union[List[str], None] = Query(default=None),
+            month: Union[List[str], None] = Query(default=None),
+            city: Union[List[str], None] = Query(default=None),
+            store_nbr: Union[List[str], None] = Query(default=None)
+        ):
+
+    query_items = {
+            'year': year,
+            'month': month,
+            'city': city,
+            'store_nbr': store_nbr,
+        }
+
+    # build X ⚠️ beware to the order of the parameters ⚠️
+    X = pd.DataFrame(dict(
+                year=[int(i) for i in query_items['year']],
+                month=[int(i) for i in query_items['month']],
+                city=[str(i) for i in query_items['city']],
+                store_nbr=[int(i) for i in query_items['store_nbr']]
+            ))
+
+    #X = pd.DataFrame(query_items)
+
+    # pipeline = get_model_from_gcp()
+    pipe = joblib.load('model_store.joblib')
+
+    #breakpoint()
+    # make prediction
+    results = pipe.predict(X).tolist()
+    results = [np.around(np.exp(i),decimals=2) for i in results]
+    results = np.array(results)
+
+    # convert response from numpy to python type
+    pred = dict(enumerate(results.flatten(), 1))
+
+    return dict(sales_baseline_year=pred)
+
+@app.get("/predict-family-year")
+def predict(year: Union[List[str], None] = Query(default=None),
+            month: Union[List[str], None] = Query(default=None),
+            city: Union[List[str], None] = Query(default=None),
+            store_nbr: Union[List[str], None] = Query(default=None),
+            family: Union[List[str], None] = Query(default=None)
+        ):
+
+    query_items = {
+            'year': year,
+            'month': month,
+            'city': city,
+            'store_nbr': store_nbr,
+            'family': family
+        }
+
+    # build X ⚠️ beware to the order of the parameters ⚠️
+    X = pd.DataFrame(dict(
+                year=[int(i) for i in query_items['year']],
+                month=[int(i) for i in query_items['month']],
+                city=[str(i) for i in query_items['city']],
+                store_nbr=[int(i) for i in query_items['store_nbr']],
+                family=[str(i) for i in query_items['family']]
+            ))
+
+    #X = pd.DataFrame(query_items)
+
+    # pipeline = get_model_from_gcp()
+    pipe = joblib.load('model_family.joblib')
+
+    #breakpoint()
+    # make prediction
+    results = pipe.predict(X).tolist()
+    results = [np.around(np.exp(i),decimals=2) for i in results]
+    results = np.array(results)
+
+    # convert response from numpy to python type
+    pred = dict(enumerate(results.flatten(), 1))
+
+    return dict(sales_baseline_year=pred)

@@ -1,45 +1,9 @@
-import pandas as pd
-import numpy as np
+from package.etl import *
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
 import joblib
-
-# set for fetching and merging data
-def DataMerging(csv_left, csv_stores):
-    ''' function for merging stores dataset to train/test '''
-    csv_stores = csv_stores[['store_nbr','city']]
-    df = pd.merge(csv_left, csv_stores, how='left', on='store_nbr')
-    df['date'] = pd.to_datetime(df['date'])
-    df['year'] = df['date'].dt.year
-    df['month'] = df['date'].dt.month
-    df = df.drop(columns=['date', 'id', 'onpromotion', 'family'])
-    df = df.groupby(["year","month","city",'store_nbr']).sum().reset_index()
-
-    return df
-
-def DataTrain():
-    ''' function for for getting X and y train sets'''
-    path = 'gs://business-case/'
-    csv_left = pd.read_csv(path+'train.csv')
-    csv_stores = pd.read_csv(path+"stores.csv")
-    df = DataMerging(csv_left, csv_stores)
-    df.loc[df['sales']==0,'sales'] = 0.1
-    df['sales'] = np.log(df['sales'])
-    X_train = df.drop(columns='sales')
-    y_train = df['sales']
-
-    return X_train, y_train
-
-def DataPredict():
-    ''' function for prediction set'''
-    path = 'gs://business-case/'
-    csv_left = pd.read_csv(path+'test.csv')
-    csv_stores = pd.read_csv(path+"stores.csv")
-    X_predict = DataMerging(csv_left, csv_stores)
-
-    return X_predict
 
 
 
@@ -71,13 +35,17 @@ def Pipe(X_train, y_train):
     return pipeline, preprocessor
 
 def TrainStore():
-    X_train, y_train = DataTrain()
-    X_predict = DataPredict()
+    drop = ['onpromotion', 'family']
+    features = ["year","month",'city', 'store_nbr']
+    X_train, y_train = DataTrain(drop, features)
+    X_predict = DataPredict(drop, features)
     pipe, preprocessor = Pipe(X_train, y_train)
 
     return X_train, y_train, X_predict, pipe, preprocessor
 
 if __name__ == '__main__':
-    X_train, y_train = DataTrain()
-    X_predict = DataPredict()
+    drop = ['onpromotion', 'family']
+    features = ["year","month",'city', 'store_nbr']
+    X_train, y_train = DataTrain(drop, features)
+    X_predict = DataPredict(drop, features)
     pipe, preprocessor = Pipe(X_train, y_train)
