@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Jun  6 09:20:22 2022
+# Make data base, printed on Tue Jun  7 10:58:30 2022
 
 # Variables
 
@@ -34,12 +34,8 @@ VSCODE_LOG_NATIVE = false
 CURDIR := /home/yuka/code/mrdaraujo/business_case_869
 # makefile
 SHELL = /bin/sh
-# makefile (from 'Makefile', line 102)
-LOCAL_PATH = "model.joblib"
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
-# makefile (from 'Makefile', line 108)
-BUCKET_FILE_NAME = $(shell basename ${LOCAL_PATH})
 # environment
 _ = /mnt/c/Users/yukio/AppData/Local/Programs/Microsoft VS Code/bin/code
 # environment
@@ -58,6 +54,10 @@ VSCODE_CWD = /mnt/c/Users/yukio/AppData/Local/Programs/Microsoft VS Code
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
 PATH = /home/yuka/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:./bin:./node_modules/.bin:/home/yuka/.pyenv/plugins/pyenv-virtualenv/shims:/home/yuka/.rbenv/bin:/home/yuka/.pyenv/plugins/pyenv-virtualenv/shims:/home/yuka/.pyenv/shims:/home/yuka/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Users/yukio/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/yukio/AppData/Local/Programs/Microsoft VS Code/bin:/usr/local/sbin
+# makefile (from 'Makefile', line 102)
+LOCAL_PATH_1 = "model_baseline.joblib"
+# makefile (from 'Makefile', line 111)
+BUCKET_FILE_NAME_1 = $(shell basename ${LOCAL_PATH_1})
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -71,31 +71,35 @@ VSCODE_LOG_STACK = false
 # environment
 PYENV_ROOT = /home/yuka/.pyenv
 # environment
-VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-2a4ca1ac-1f25-4996-9081-e1f42db32378.sock
+VSCODE_IPC_HOOK_CLI = /mnt/wslg/runtime-dir/vscode-ipc-2efe6e56-a98a-4476-96a2-b91da524caf7.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
 LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
 # environment
-SSH_AUTH_SOCK = /tmp/ssh-nNQlDJ8XQ9ag/agent.272
+SSH_AUTH_SOCK = /tmp/ssh-4k8QGFFlC8W5/agent.393
 # automatic
 %F = $(notdir $%)
 # environment
 DISPLAY = :0
+# makefile (from 'Makefile', line 112)
+BUCKET_FILE_NAME_2 = $(shell basename ${LOCAL_PATH_2})
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/yuka/code/mrdaraujo/business_case_869
+# makefile (from 'Makefile', line 103)
+LOCAL_PATH_2 = "model_city.joblib"
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 274
+SSH_AGENT_PID = 395
 # environment
-WSL_INTEROP = /run/WSL/164_interop
+WSL_INTEROP = /run/WSL/1281_interop
 # environment
 PULSE_SERVER = /mnt/wslg/PulseServer
 # environment
-WT_SESSION = e4fa7fbf-872a-4d94-a280-75be9058392a
+WT_SESSION = fe2e562c-174a-48fe-aa96-1ea6967a4352
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -114,8 +118,12 @@ PYTHONBREAKPOINT = ipdb.set_trace
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
+# makefile (from 'Makefile', line 105)
+LOCAL_PATH_4 = "model_family.joblib"
 # environment
 MAKELEVEL := 0
+# makefile (from 'Makefile', line 114)
+BUCKET_FILE_NAME_4 = $(shell basename ${LOCAL_PATH_4})
 # default
 MAKE = $(MAKE_COMMAND)
 # default
@@ -158,7 +166,7 @@ MFLAGS = -pqrR
 NVM_DIR = /home/yuka/.nvm
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
-# makefile (from 'Makefile', line 105)
+# makefile (from 'Makefile', line 108)
 BUCKET_FOLDER = 'trainings_local'
 # automatic
 +F = $(notdir $+)
@@ -174,6 +182,10 @@ PACKAGE_NAME = package
 WT_PROFILE_ID = {2c4de342-38b7-51cf-b940-2309a097f518}
 # default
 MAKEFILES := 
+# makefile (from 'Makefile', line 104)
+LOCAL_PATH_3 = "model_store.joblib"
+# makefile (from 'Makefile', line 113)
+BUCKET_FILE_NAME_3 = $(shell basename ${LOCAL_PATH_3})
 # automatic
 <F = $(notdir $<)
 # makefile (from 'Makefile', line 87)
@@ -217,7 +229,7 @@ VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 # environment
 WSL_DISTRO_NAME = Ubuntu
 # variable set hash-table stats:
-# Load=103/1024=10%, Rehash=0, Collisions=6/131=5%
+# Load=109/1024=11%, Rehash=0, Collisions=7/137=5%
 
 # Pattern-specific Variable Values
 
@@ -225,9 +237,9 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 2080, inode 44125): 23 files, no impossibilities.
+# . (device 2080, inode 44125): 26 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 26 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -264,6 +276,7 @@ pypi:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 55):
 	@twine upload dist/* -u $(PYPI_USERNAME)
+ 
 
 # Not a target:
 .SUFFIXES:
@@ -274,8 +287,7 @@ pypi:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-03 20:59:46.282921326
- 
+#  Last modified 2022-06-06 17:42:27.515715798
 #  File has been updated.
 #  Successfully updated.
 
@@ -312,8 +324,11 @@ upload_data:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 112):
-	@gsutil cp ${LOCAL_PATH} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME}
+#  recipe to execute (from 'Makefile', line 118):
+	@gsutil cp ${LOCAL_PATH_1} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_1}
+	@gsutil cp ${LOCAL_PATH_2} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_2}
+	@gsutil cp ${LOCAL_PATH_3} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_3}
+	@gsutil cp ${LOCAL_PATH_4} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_4}
 
 set_project:
 #  Implicit rule search has not been done.
@@ -407,7 +422,7 @@ run_api:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 115):
+#  recipe to execute (from 'Makefile', line 124):
 	uvicorn api.fast:app --reload  # load web server with code autoreload
 
 install:
@@ -425,12 +440,12 @@ install:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 43 / storage = 420 B / avg = 9 B
-# current buf: size = 8162 B / used = 420 B / count = 43 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 46 / storage = 486 B / avg = 10 B
+# current buf: size = 8162 B / used = 486 B / count = 46 / avg = 10 B
 
-# strcache performance: lookups = 72 / hit rate = 40%
+# strcache performance: lookups = 75 / hit rate = 38%
 # hash-table stats:
-# Load=43/8192=1%, Rehash=0, Collisions=1/72=1%
-# Finished Make data base on Mon Jun  6 09:20:22 2022
+# Load=46/8192=1%, Rehash=0, Collisions=1/75=1%
+# Finished Make data base on Tue Jun  7 10:58:30 2022
 
  
