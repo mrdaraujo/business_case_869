@@ -1,5 +1,3 @@
-#imports
-from re import A
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,16 +11,17 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from PIL import Image
 
+
 #Constants
 Const_Store_nbr = 54
 api_token = px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
-Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
+#Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
+Const_LocalPath = 'https://storage.googleapis.com/business-case/Production%20files/'
 #Const_LocalPath = "gs://business-case/Production files/"
 Const_url_predict_city = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-city-year'
 Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-store-year'
 Const_url_predict_family = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-family-year'
 Const_month_predict = ['1','2','3','4','5','6','7','8','9','10','11','12']
-
 
 #Load image
 Image_LeWagon_Red = Image.open('images/LeWagon_Red.png')
@@ -45,8 +44,6 @@ with col_:
     color:white; font-size: 255%;">of sales for store companies</p>'
     st.markdown(title_AnalysisPrediction,unsafe_allow_html=True )
     st.markdown(title_SalesStoreCompanies,unsafe_allow_html=True )
-#with col2:
-   #st.image(Image_LeWagon_Red, caption="")
 
 row1_1, row1_2 = st.columns((2, 3))
 with row1_1:
@@ -404,7 +401,6 @@ if len(st.session_state) != 0:
     }
 
     page_names_to_funcs[selected_page]()
-
 
 #Session States
 st.session_state.count += 1
