@@ -10,6 +10,7 @@ import requests
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from PIL import Image
+from fbprophet import Prophet
 
 
 #Constants
@@ -351,6 +352,44 @@ if len(st.session_state) != 0:
                  store_selection)
         st.write(fig)
 
+    if st.session_state.count == 0:
+        print('Rodando o Facebook Prophet')
+        @st.cache()
+        def family(sales_and_stores):
+            
+            sales_and_stores = sales_and_stores.rename(columns={'date': 'ds', 'sales':'y'}).drop(columns=["month", "year", "city"])
+
+            forecasts = {}
+            for category in sales_and_stores['family'].unique():
+
+                print(category)
+                # creating a new variable
+                tmp_df_prep = sales_and_stores[sales_and_stores['family']== category]
+                
+                # Transforming the column in date time
+                tmp_df_prep['ds'] = pd.to_datetime(tmp_df_prep['ds'])
+        
+                # creating a temporary df to the the training and prediction
+                tmp_df = tmp_df_prep.groupby(by='ds').sum().drop(columns=["store_nbr"]).reset_index()
+                
+                
+                # defining the train/test 
+                train = tmp_df.iloc[:1457]
+                test = tmp_df.iloc[1458:]
+                
+                
+                # Instantiating the FB Prophet model
+                model = Prophet(seasonality_mode='multiplicative')
+
+                # fitting the model on the train test
+                model.fit(train)
+                
+                forecasts[category]= model
+            
+            return forecasts
+
+        st.session_state.model_family = family(st.session_state.data_train_merge_stores)
+
 
     def page4():
         st.markdown("Prediction based on store and family")
@@ -385,9 +424,18 @@ if len(st.session_state) != 0:
         st.write("Plot Prediction for 12 months in year ", date_selection_prevision.year, "for city " , city_selection, " and store ",
                  store_selection, " and family ", family_prediction_selection)
         st.write(fig)
+        st.write("Facebook Prophet")
+        
+        
+        future = st.session_state.model_family[family_prediction_selection].make_future_dataframe(periods=12, freq='MS')  #period of 12 months
+        forecast_future = st.session_state.model_family[family_prediction_selection].predict(future)
+        forecast_future.head()
+        
+        fig = st.session_state.model_family[family_prediction_selection].plot(forecast_future)
+        st.write(fig)
 
-
-
+        fig = st.session_state.model_family[family_prediction_selection].plot_components(fcst=forecast_future)
+        st.write(fig)
 
 
 

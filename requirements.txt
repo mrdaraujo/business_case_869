@@ -38,5 +38,5 @@ streamlit
 matplotlib
 plotly
 seaborn
-
+fbprophet
 
