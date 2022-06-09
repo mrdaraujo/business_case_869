@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://console.cloud.google.com/
+HostUrl=https://storage.googleapis.com/business-case/Production%20files/data_train_merge_stores.csv

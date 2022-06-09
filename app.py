@@ -456,8 +456,8 @@ if 'count' not in st.session_state : #or (st.session_state.last_ticker != ticker
     def getting_csv():
         # Getting all csv files that are not going to change
         df_heatmap = pd.read_csv(Const_LocalPath + "Heatmap.csv")
-        data_train_merge_stores = pd.read_csv(Const_LocalPath + "data_train_merge_stores.csv")
-        map_base = pd.read_csv(Const_LocalPath + "map_base.csv")
+        data_train_merge_stores = pd.read_parquet("data_train_merge_stores.parquet")
+        map_base = pd.read_parquet("map_base.parquet")
         sales_city_year = pd.read_csv(Const_LocalPath +"sales_city_year.csv")
         map_base_top_five = pd.read_csv(Const_LocalPath + "map_base_top_five.csv")
         map_base_top_five['year'] = map_base_top_five['year'].astype('string')
