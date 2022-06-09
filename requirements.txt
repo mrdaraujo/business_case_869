@@ -32,9 +32,11 @@ termcolor
 fsspec     #needed to import csv files straight from the GCP
 gcsfs      #needed to import csv files straight from the GCP
 
+
 # frontend
 streamlit
 matplotlib
 plotly
 seaborn
+
 
