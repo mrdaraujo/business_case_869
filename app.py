@@ -387,23 +387,59 @@ import plotly.express as px
 import seaborn as sns
 import datetime
 import requests
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+from PIL import Image
 
 ######### Create the user interface #########
 ## Use streamlit for the app
 
-# Define text, title and header
-st.header('Business Case -- Le Wagon 869')
-st.subheader('How to analyse and predict sales in a company with different stores, cities and product types')
-st.text('Case study: 54 stores in 22 cities in Ecuador for a commercial company')
+#[theme]
+
+# Primary accent for interactive elements
+#primaryColor = '#7792E3'
+# Background color for the main content area
+#backgroundColor = '#273346'
+# Background color for sidebar and most interactive widgets
+#secondaryBackgroundColor = '#B9F1C0'
+# Color used for almost all text
+#textColor = '#FFFFFF'
+# Font family for all text in the app, except code blocks
+# Accepted values (serif | sans serif | monospace)
+# Default: "sans serif"
+#font = "sans serif"
 
 #Constante
 Const_Store_nbr = 54
 api_token = px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
 Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
+#Const_LocalPath = "gs://business-case/Production files/"
 Const_url_predict_city = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-city-year'
 Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-store-year'
 Const_url_predict_family = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-family-year'
 Const_month_predict = ['1','2','3','4','5','6','7','8','9','10','11','12']
+
+
+imageStore = Image.open(Const_LocalPath + 'Favorita logo.png')
+imageLeWagon = Image.open(Const_LocalPath + 'lewagonlogo.png')
+col1, col_, col2 = st.columns([1,4,1])
+with col1:
+    st.image(imageStore, caption="")
+with col_:
+    # Define text, title and header
+    st.header('Business Case -- Le Wagon 869')
+    st.subheader('How to analyse and predict sales in a company with different stores, cities and product types')
+    st.text('Case study: 54 stores in 22 cities in Ecuador for a commercial company')
+
+    #new_title = '<p style="font-family:sans-serif; color:Green; font-size: 42px;">New image</p>'
+    #st.markdown(new_title, unsafe_allow_html=True)
+
+with col2:
+   st.image(imageLeWagon, caption="")
+
+
+
+
 
 # Load csv dataset - Check the cache
 # Initialization
@@ -510,17 +546,36 @@ if len(st.session_state) != 0:
         # Create a first part for analysis on cities
         with st.expander("1.1) General analysis on sales and cities"):
 
+            #col1, col2 = st.columns(2)
+
+            #with col1:
             st.caption("a) Map with cities and sales")
             px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
             df = px.data.election_geojson()
             fig = px.scatter_mapbox(data_frame=st.session_state.sales_city_year, lat="Lat", lon="Lon", color="city", size="sales",
-                        color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=5, mapbox_style="carto-darkmatter")
+                  color_continuous_scale=px.colors.cyclical.IceFire, size_max=45, zoom=5, mapbox_style="carto-positron")
+
+
+
             st.write(fig)
 
+            #with col2:
             st.caption("b) Sales for top 5 cities")
             fig = px.bar(st.session_state.map_base_top_five, x='city', y='sales', color='year')
             st.write(fig)
 
+        #                     fig = make_subplots(rows=1, cols=2)
+         #       fig.add_trace(
+          #          fig2.data[0],
+           #         row=1,
+            #        col=1,
+            #    )
+             #   fig.add_trace(
+              #      fig2.data[0],
+               #     row=1,
+                #    col=2,
+                #)
+                #fig
 
         #Create a second part for analysis on stores
         with st.expander("1.2) General analysis on sales and stores") :
