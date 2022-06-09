@@ -419,6 +419,7 @@ Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/pred
 Const_url_predict_family = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-family-year'
 Const_month_predict = ['1','2','3','4','5','6','7','8','9','10','11','12']
 
+test = "test"
 
 imageStore = Image.open(Const_LocalPath + 'Favorita logo.png')
 imageLeWagon = Image.open(Const_LocalPath + 'lewagonlogo.png')
