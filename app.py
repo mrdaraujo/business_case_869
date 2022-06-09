@@ -15,8 +15,8 @@ from PIL import Image
 #Constants
 Const_Store_nbr = 54
 api_token = px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
-#Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
-Const_LocalPath = 'https://storage.googleapis.com/business-case/Production%20files/'
+Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
+#Const_LocalPath = 'https://storage.googleapis.com/business-case/Production%20files/'
 #Const_LocalPath = "gs://business-case/Production files/"
 Const_url_predict_city = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-city-year'
 Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-store-year'
@@ -169,53 +169,31 @@ if len(st.session_state) != 0:
         #Plot the top 5
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
             vertical-align: middle;\
-            '><strong>II) Your Top 5 sales ? 🖐🏅 </strong></h1>", unsafe_allow_html=True)
+            '><strong>II) Your Top 5 ? 🖐🏅 </strong></h1>", unsafe_allow_html=True)
         #fig = make_subplots(rows=1, cols=2)
         col1, col2, col3 = st.columns((1,1,1))
         with col1:
-            text_Top5Cities = '<td style="text-align: center; color: blue;font-family: arial; font-size: 150%;\
-                vertical-align: middle;line-height: 21px"> \
-                <p style="margin: 0 0 0 0; font-size: 150%; line-height: 23px; border-color:#3C3F44 \
-                ><em>Top 5 cities 🌆 </em></p></td'
-            st.markdown(text_Top5Cities,unsafe_allow_html=True )
+            st.markdown("<h1 style='text-align: center; color: blue;font-family: arial; font-size: 130%;\
+            vertical-align: middle;\
+            '><strong>Top 5 cities 🌆</strong></h1>", unsafe_allow_html=True)
             fig_top5_Cities = px.bar(st.session_state.map_base_top_five, x='city', y='sales', color='city')
             st.plotly_chart(fig_top5_Cities, use_container_width=True)
         with col2:
-            text_Top5Stores = '<td style="text-align: center; color: blue;font-family: arial; font-size: 120%;\
-                vertical-align: middle;line-height: 21px"> \
-                <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:#3C3F44 \
-                ><em>Top 5 stores 🏪 </em></p></td'
-            st.markdown(text_Top5Stores,unsafe_allow_html=True )
+            st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
+                         font-size: 130%;'><strong>Top 5 stores 🏪 </strong></h1>", unsafe_allow_html=True)
             fig_top5_Stores = px.bar(st.session_state.df_stores_top_five, x='store_nbr', y='sales', color = 'city')
             st.plotly_chart(fig_top5_Stores, use_container_width=True)
         with col3:
-            text_Top5Family = '<td style="text-align: center; color: blue;font-family: arial; font-size: 120%;\
-                vertical-align: middle;line-height: 21px"> \
-                <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:#3C3F44 \
-                ><em>Top 5 categories 🛍 </em></p></td'
-            st.markdown(text_Top5Family,unsafe_allow_html=True )
+            st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
+                         font-size: 130%;'><strong>Top 5 categories 🛍</strong></h1>", unsafe_allow_html=True)
             fig_top5_Family = px.bar(data_frame=st.session_state.data_top5family, x='category', y='sales', color='category')
             st.plotly_chart(fig_top5_Family, use_container_width=True)
-        #
-        #fig.add_trace(fig_top5_Cities.data[0],row=1, col=1)
-        #fig.add_trace(fig_top5_Stores.data[0],row=1, col=2)
-        #fig.add_trace(fig_top5_Family.data[0],row=2, col=2)
-        #fig.update_layout(height=600, width=800, title_text="Side By Side Subplots")
-        #st.write(fig)
 
+        #Plot the stores
+        st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
+            vertical-align: middle;\
+            '><strong>III) Let's focus on your stores🖐🏅 </strong></h1>", unsafe_allow_html=True)
 
-        #with row2_2:
-        #st.write("**top 5 cities**")
-
-        #st.write(fig_top5_Cities)
-    #with row2_3:
-        #st.write("**top 5 stores**")
-
-        #st.write(fig_top5_Stores)
-    #with row2_4:
-        #st.write("**top 5 categories**")
-
-        #st.write(fig_top5_Family)
 
         #Create a second part for analysis on stores
         with st.expander("1.2) General analysis on sales and stores") :
@@ -274,9 +252,9 @@ if len(st.session_state) != 0:
             fig = px.bar(data_frame=st.session_state.data_family_allyear, x='family', y='sales', color='family')
             st.write(fig)
 
-            st.caption("c) Sales for top 5 families")
-            fig = px.bar(data_frame=st.session_state.data_top5family, x='family', y='sales', color='family')
-            st.write(fig)
+            #st.caption("c) Sales for top 5 families")
+            #fig = px.bar(data_frame=st.session_state.data_top5family, x='family', y='sales', color='family')
+            #st.write(fig)
 
             st.caption("d) Sales for selected families on all stores")
             family_selection_df = st.session_state.data_family_peryear[st.session_state.data_family_peryear['family'].isin(family_selection)]
