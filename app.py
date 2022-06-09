@@ -252,9 +252,9 @@ if len(st.session_state) != 0:
             fig = px.bar(data_frame=st.session_state.data_family_allyear, x='family', y='sales', color='family')
             st.write(fig)
 
-            st.caption("c) Sales for top 5 families")
-            fig = px.bar(data_frame=st.session_state.data_top5family, x='family', y='sales', color='family')
-            st.write(fig)
+            #st.caption("c) Sales for top 5 families")
+            #fig = px.bar(data_frame=st.session_state.data_top5family, x='family', y='sales', color='family')
+            #st.write(fig)
 
             st.caption("d) Sales for selected families on all stores")
             family_selection_df = st.session_state.data_family_peryear[st.session_state.data_family_peryear['family'].isin(family_selection)]
