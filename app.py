@@ -12,26 +12,7 @@ from plotly.subplots import make_subplots
 from PIL import Image
 
 
-
-######### Create the user interface #########
-## Use streamlit for the app
-
-#[theme]
-
-# Primary accent for interactive elements
-#primaryColor = '#7792E3'
-# Background color for the main content area
-#backgroundColor = '#273346'
-# Background color for sidebar and most interactive widgets
-#secondaryBackgroundColor = '#B9F1C0'
-# Color used for almost all text
-#textColor = '#FFFFFF'
-# Font family for all text in the app, except code blocks
-# Accepted values (serif | sans serif | monospace)
-# Default: "sans serif"
-#font = "sans serif"
-
-#Constante
+#Constants
 Const_Store_nbr = 54
 api_token = px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
 #Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
@@ -42,36 +23,50 @@ Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/pred
 Const_url_predict_family = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-family-year'
 Const_month_predict = ['1','2','3','4','5','6','7','8','9','10','11','12']
 
-test = "test"
+#Load image
+Image_LeWagon_Red = Image.open('images/LeWagon_Red.png')
+#Image_LeWagon_White = Image.open(Const_LocalPath + 'LeWagon_White.png')
+#Image_Store= Image.open(Const_LocalPath + 'Store.jpeg')
+#Image_Favorita = Image.open(Const_LocalPath + 'Favorita.png')
+Image_Data_visualization = Image.open('images/Data visualization.jpeg')
 
-#imageStore = Image.open(Const_LocalPath + 'Favorita logo.png')
-# imageLeWagon = Image.open(Const_LocalPath + 'lewagonlogo.png')
-# col1, col_, col2 = st.columns([1,4,1])
-# with col1:
-#     st.image(imageStore, caption="")
-# with col_:
-#     # Define text, title and header
-#     st.header('Business Case -- Le Wagon 869')
-#     st.subheader('How to analyse and predict sales in a company with different stores, cities and product types')
-#     st.text('Case study: 54 stores in 22 cities in Ecuador for a commercial company')
+#Set titles for all pages
+st.set_page_config(layout="wide")
+col1, col_ = st.columns([1,5])
+with col1:
+    st.image(Image_LeWagon_Red, caption="")
+with col_:
+    title_AnalysisPrediction = '<p style="font-family:arial; \
+    background-color:red;text-align:center; \
+    color:white; font-size: 255%;">Analysis and Prediction</p>'
+    title_SalesStoreCompanies = '<p style="font-family:arial; \
+    background-color:red;text-align:center; \
+    color:white; font-size: 255%;">of sales for store companies</p>'
+    st.markdown(title_AnalysisPrediction,unsafe_allow_html=True )
+    st.markdown(title_SalesStoreCompanies,unsafe_allow_html=True )
 
-    #new_title = '<p style="font-family:sans-serif; color:Green; font-size: 42px;">New image</p>'
-    #st.markdown(new_title, unsafe_allow_html=True)
-
-# with col2:
-#    st.image(imageLeWagon, caption="")
-
-
-
-
+row1_1, row1_2 = st.columns((2, 3))
+with row1_1:
+    text_Product = '<td style="font-family: arial; font-size: 15px; \
+        line-height: 21px; color:blue; text-align: center; vertical-align: middle">\
+            <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:red\
+  "><strong>Our Product : <br> An interactive tool that presents an analysis of our client business\
+  on all different levels  \
+           </strong></p></td>'
+    st.markdown(text_Product,unsafe_allow_html=True )
+with row1_2:
+    text_CaseStudy = '<td style="font-family: arial; font-size: 15px; \
+        line-height: 21px; color: #3C3F44; text-align: center; vertical-align: middle">\
+            <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:#3C3F44\
+  "><em>Case study : <br> Examining sales from 2013 to 2016 for a company located in Ecuador. \
+           The company is in 22 cities \
+    with 54 stores and sell 33 categories of products</em></p></td>'
+    st.markdown(text_CaseStudy,unsafe_allow_html=True )
 
 # Load csv dataset - Check the cache
 # Initialization
-#st.write(st.session_state.count)
-if 'count' not in st.session_state : #or (st.session_state.last_ticker != ticker) :
+if 'count' not in st.session_state :
     st.session_state.count = 0
-    st.write("Executing the getting csv function")
-    init = datetime.datetime.now()
     @st.cache()
     def getting_csv():
         # Getting all csv files that are not going to change
@@ -80,7 +75,6 @@ if 'count' not in st.session_state : #or (st.session_state.last_ticker != ticker
         map_base = pd.read_csv(Const_LocalPath + "map_base.csv")
         sales_city_year = pd.read_csv(Const_LocalPath +"sales_city_year.csv")
         map_base_top_five = pd.read_csv(Const_LocalPath + "map_base_top_five.csv")
-        map_base_top_five['year'] = map_base_top_five['year'].astype('string')
         df_stores_city = pd.read_csv(Const_LocalPath + "df_stores_city.csv")
         df_MaxSales_BiggestStore = pd.read_csv(Const_LocalPath + "df_MaxSales_BiggestStore.csv")
         df_MaxSales_BiggestStore['store_nbr'] = df_MaxSales_BiggestStore['store_nbr'].astype('string')
@@ -92,27 +86,8 @@ if 'count' not in st.session_state : #or (st.session_state.last_ticker != ticker
         data_top5family = pd.read_csv(Const_LocalPath + "data_top5family.csv")
         return df_heatmap, data_train_merge_stores,map_base,sales_city_year,map_base_top_five,df_stores_city,df_MaxSales_BiggestStore, df_stores_top_five,data_family_peryear, data_family_allyear, data_top5family
     st.session_state.df_heatmap, st.session_state.data_train_merge_stores,st.session_state.map_base,st.session_state.sales_city_year,st.session_state.map_base_top_five,st.session_state.df_stores_city,st.session_state.df_MaxSales_BiggestStore, st.session_state.df_stores_top_five,st.session_state.data_family_peryear, st.session_state.data_family_allyear, st.session_state.data_top5family = getting_csv()
-    finish = datetime.datetime.now()
-    st.write(finish-init)
-
-#df_heatmap = pd.read_csv(Const_LocalPath + "Heatmap.csv")
-#data_train_merge_stores = pd.read_csv(Const_LocalPath + "data_train_merge_stores.csv")
-#map_base = pd.read_csv(Const_LocalPath + "map_base.csv")
-#sales_city_year = pd.read_csv(Const_LocalPath +"sales_city_year.csv")
-#map_base_top_five = pd.read_csv(Const_LocalPath + "map_base_top_five.csv")
-#map_base_top_five['year'] = map_base_top_five['year'].astype('string')
-#df_stores_city = pd.read_csv(Const_LocalPath + "df_stores_city.csv")
-#df_MaxSales_BiggestStore = pd.read_csv(Const_LocalPath + "df_MaxSales_BiggestStore.csv")
-#df_MaxSales_BiggestStore['store_nbr'] = df_MaxSales_BiggestStore['store_nbr'].astype('string')
-#df_stores_top_five = pd.read_csv(Const_LocalPath + "df_stores_top_five.csv")
-#df_stores_top_five['store_nbr'] = df_stores_top_five['store_nbr'].astype('string')
-#data_family_peryear = pd.read_csv(Const_LocalPath + "data_family_peryear.csv")
-#data_family_peryear['year'] = data_family_peryear['year'].astype('string')
-#data_family_allyear = pd.read_csv(Const_LocalPath + "data_family_allyear.csv")
-#data_top5family = pd.read_csv(Const_LocalPath + "data_top5family.csv")
 
 if len(st.session_state) != 0:
-
     # Create a block on the left - Selection
     # 1st column - Selection of information given by the user
 
@@ -165,41 +140,82 @@ if len(st.session_state) != 0:
         st.write('Selected family for prediction: ', family_prediction_selection)
 
     def main_page ():
-        st.header("1) Data visualization")
-
-        # Create a first part for analysis on cities
-        with st.expander("1.1) General analysis on sales and cities"):
-
-            #col1, col2 = st.columns(2)
-
-            #with col1:
-            st.caption("a) Map with cities and sales")
-            px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
-            df = px.data.election_geojson()
-            fig = px.scatter_mapbox(data_frame=st.session_state.sales_city_year, lat="Lat", lon="Lon", color="city", size="sales",
-                  color_continuous_scale=px.colors.cyclical.IceFire, size_max=45, zoom=5, mapbox_style="carto-positron")
-
+        col_,col1, col2,col__ = st.columns((1,1,3,2))
+        with col1:
+                st.write("")
+                new_image = Image_Data_visualization.resize((250, 250))
+                st.markdown('')
+                st.image(new_image,use_column_width=True)
+        with col2:
+            st.write("-------")
+            st.markdown("<h1 style='text-align: center; color: red;font-family: arial; font-size: 200%;\
+                        vertical-align: middle ; line-height: 21px\
+                    '><strong>Data Visualization</strong></h1>", unsafe_allow_html=True)
+            st.write("-------")
 
 
-            st.write(fig)
+        #Plot the map
+        st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
+            vertical-align: middle;\
+            '><strong>I) Where do you sell the most ? 🌍</strong></h1>", unsafe_allow_html=True)
+        px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
+        df = px.data.election_geojson()
+        fig = px.scatter_mapbox(data_frame=st.session_state.sales_city_year, lat="Lat", lon="Lon", color="city", size="sales",
+                 hover_name="city",
+                 color_continuous_scale=px.colors.cyclical.IceFire, size_max=50, zoom=5.5, mapbox_style="open-street-map")
+        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+        st.plotly_chart(fig, use_container_width=True)
 
-            #with col2:
-            st.caption("b) Sales for top 5 cities")
-            fig = px.bar(st.session_state.map_base_top_five, x='city', y='sales', color='year')
-            st.write(fig)
+        #Plot the top 5
+        st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
+            vertical-align: middle;\
+            '><strong>II) Your Top 5 sales ? 🖐🏅 </strong></h1>", unsafe_allow_html=True)
+        #fig = make_subplots(rows=1, cols=2)
+        col1, col2, col3 = st.columns((1,1,1))
+        with col1:
+            text_Top5Cities = '<td style="text-align: center; color: blue;font-family: arial; font-size: 150%;\
+                vertical-align: middle;line-height: 21px"> \
+                <p style="margin: 0 0 0 0; font-size: 150%; line-height: 23px; border-color:#3C3F44 \
+                ><em>Top 5 cities 🌆 </em></p></td'
+            st.markdown(text_Top5Cities,unsafe_allow_html=True )
+            fig_top5_Cities = px.bar(st.session_state.map_base_top_five, x='city', y='sales', color='city')
+            st.plotly_chart(fig_top5_Cities, use_container_width=True)
+        with col2:
+            text_Top5Stores = '<td style="text-align: center; color: blue;font-family: arial; font-size: 120%;\
+                vertical-align: middle;line-height: 21px"> \
+                <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:#3C3F44 \
+                ><em>Top 5 stores 🏪 </em></p></td'
+            st.markdown(text_Top5Stores,unsafe_allow_html=True )
+            fig_top5_Stores = px.bar(st.session_state.df_stores_top_five, x='store_nbr', y='sales', color = 'city')
+            st.plotly_chart(fig_top5_Stores, use_container_width=True)
+        with col3:
+            text_Top5Family = '<td style="text-align: center; color: blue;font-family: arial; font-size: 120%;\
+                vertical-align: middle;line-height: 21px"> \
+                <p style="margin: 0 0 0 0; font-size: 17px; line-height: 23px; border-color:#3C3F44 \
+                ><em>Top 5 categories 🛍 </em></p></td'
+            st.markdown(text_Top5Family,unsafe_allow_html=True )
+            fig_top5_Family = px.bar(data_frame=st.session_state.data_top5family, x='category', y='sales', color='category')
+            st.plotly_chart(fig_top5_Family, use_container_width=True)
+        #
+        #fig.add_trace(fig_top5_Cities.data[0],row=1, col=1)
+        #fig.add_trace(fig_top5_Stores.data[0],row=1, col=2)
+        #fig.add_trace(fig_top5_Family.data[0],row=2, col=2)
+        #fig.update_layout(height=600, width=800, title_text="Side By Side Subplots")
+        #st.write(fig)
 
-        #                     fig = make_subplots(rows=1, cols=2)
-         #       fig.add_trace(
-          #          fig2.data[0],
-           #         row=1,
-            #        col=1,
-            #    )
-             #   fig.add_trace(
-              #      fig2.data[0],
-               #     row=1,
-                #    col=2,
-                #)
-                #fig
+
+        #with row2_2:
+        #st.write("**top 5 cities**")
+
+        #st.write(fig_top5_Cities)
+    #with row2_3:
+        #st.write("**top 5 stores**")
+
+        #st.write(fig_top5_Stores)
+    #with row2_4:
+        #st.write("**top 5 categories**")
+
+        #st.write(fig_top5_Family)
 
         #Create a second part for analysis on stores
         with st.expander("1.2) General analysis on sales and stores") :
