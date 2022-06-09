@@ -61,6 +61,10 @@ PROJECT_ID=wagon-businesscase-869
 # bucket name - replace with your GCP bucket name
 BUCKET_NAME=business-case
 
+##### Training  - - - - - - - - - - - - - - - - - - - - - -
+# will store the packages uploaded to GCP for the training
+BUCKET_TRAINING_FOLDER = 'trainings'
+
 # choose your region from https://cloud.google.com/storage/docs/locations#available_locations
 REGION=southamerica-east1
 
@@ -69,3 +73,52 @@ set_project:
 
 create_bucket:
 	@gsutil mb -l ${REGION} -p ${PROJECT_ID} gs://${BUCKET_NAME}
+
+
+##### Job - - - - - - - - - - - - - - - - - - - - - - - - -
+JOB_NAME=business_case_869_$(shell date +'%Y%m%d_%H%M%S')
+
+##### Package params  - - - - - - - - - - - - - - - - - - -
+PACKAGE_NAME=package
+FILENAME=etl
+
+##### Machine configuration (defaul for GCP) - - - - - - - - - - - - - - - -
+PYTHON_VERSION=3.7
+FRAMEWORK=scikit-learn
+RUNTIME_VERSION=1.15
+
+gcp_submit_training:
+	gcloud ai-platform jobs submit training ${JOB_NAME} \
+			--job-dir gs://${BUCKET_NAME}/${BUCKET_TRAINING_FOLDER}  \
+			--package-path ${PACKAGE_NAME} \
+			--module-name ${PACKAGE_NAME}.${FILENAME} \
+			--python-version=${PYTHON_VERSION} \
+			--runtime-version=${RUNTIME_VERSION} \
+			--region ${REGION} \
+			--stream-logs
+
+# path to the file to upload to GCP (the path to the file should be absolute or should match the directory where the make command is ran)
+# replace with your local path to the `train_1k.csv` and make sure to put the path between quotes
+LOCAL_PATH_1="model_baseline.joblib"
+LOCAL_PATH_2="model_city.joblib"
+LOCAL_PATH_3="model_store.joblib"
+LOCAL_PATH_4="model_family.joblib"
+
+# bucket directory in which to store the uploaded file (`data` is an arbitrary name that we choose to use)
+BUCKET_FOLDER='trainings_local'
+
+# name for the uploaded file inside of the bucket (we choose not to rename the file that we upload)
+BUCKET_FILE_NAME_1=$(shell basename ${LOCAL_PATH_1})
+BUCKET_FILE_NAME_2=$(shell basename ${LOCAL_PATH_2})
+BUCKET_FILE_NAME_3=$(shell basename ${LOCAL_PATH_3})
+BUCKET_FILE_NAME_4=$(shell basename ${LOCAL_PATH_4})
+
+upload_data: # to save models traned locally to GCP
+  # @gsutil cp train_1k.csv gs://wagon-ml-my-bucket-name/data/train_1k.csv
+	@gsutil cp ${LOCAL_PATH_1} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_1}
+	@gsutil cp ${LOCAL_PATH_2} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_2}
+	@gsutil cp ${LOCAL_PATH_3} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_3}
+	@gsutil cp ${LOCAL_PATH_4} gs://${BUCKET_NAME}/${BUCKET_FOLDER}/${BUCKET_FILE_NAME_4}
+
+run_api:
+	uvicorn api.fast:app --reload  # load web server with code autoreload

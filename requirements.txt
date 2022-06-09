@@ -7,7 +7,7 @@ wheel>=0.29
 # data science
 numpy
 pandas
-scikit-learn
+scikit-learn==1.0.2
 
 # tests/linter
 black
@@ -21,6 +21,8 @@ gcsfs
 google-cloud-storage
 mlflow
 s3fs
+uvicorn==0.17.6
+fastapi==0.78.0
 
 # utilities
 six>=1.14
@@ -30,8 +32,3 @@ termcolor
 fsspec     #needed to import csv files straight from the GCP
 gcsfs      #needed to import csv files straight from the GCP
 
-#Front end
-streamlit
-plotly
-seaborn
-matplotlib
