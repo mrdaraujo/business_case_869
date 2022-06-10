@@ -29,9 +29,6 @@ streamlit
 matplotlib
 plotly
 seaborn
-clang
-httpstan
-pystan==2.19.1.1
 fbprophet
 
 
