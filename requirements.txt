@@ -29,6 +29,7 @@ streamlit
 matplotlib
 plotly
 seaborn
+clang
 pystan==2.19.1.1
 fbprophet
 
