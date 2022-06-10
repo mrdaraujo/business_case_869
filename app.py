@@ -10,13 +10,14 @@ import requests
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from PIL import Image
+from fbprophet import Prophet
 
 
 #Constants
 Const_Store_nbr = 54
 api_token = px.set_mapbox_access_token('pk.eyJ1IjoibXJkYXJhdWpvIiwiYSI6ImNsM3hsY2c2NzAzcHEzYm1oYmliZHc5aXoifQ.1E3p2I8p8bEkHSPJDzUXWQ')
-Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
-#Const_LocalPath = 'https://storage.googleapis.com/business-case/Production%20files/'
+#Const_LocalPath = "/Users/farahboukitab/code/mrdaraujo/business_case_869/business_case_869/data/store-sales-time-series-forecasting/"
+Const_LocalPath = 'https://storage.googleapis.com/business-case/Production%20files/'
 #Const_LocalPath = "gs://business-case/Production files/"
 Const_url_predict_city = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-city-year'
 Const_url_predict_store = 'https://image-bc869-v2-1-ob6evlacjq-ew.a.run.app/predict-store-year'
@@ -156,10 +157,11 @@ if len(st.session_state) != 0:
             fig_top5_Stores = px.bar(st.session_state.df_stores_top_five, x='store_nbr', y='sales', color = 'city')
             st.plotly_chart(fig_top5_Stores, use_container_width=True)
         with col3:
-            st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
-                         font-size: 130%;'><strong>Top 5 categories 🛍</strong></h1>", unsafe_allow_html=True)
-            fig_top5_Family = px.bar(data_frame=st.session_state.data_top5family, x='category', y='sales', color='category')
-            st.plotly_chart(fig_top5_Family, use_container_width=True)
+            st.text("")
+            # st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
+            #             font-size: 130%;'><strong>Top 5 categories 🛍</strong></h1>", unsafe_allow_html=True)
+            # fig_top5_Family = px.bar(data_frame=st.session_state.data_top5_family, x='category', y='sales', color='category')
+            # st.plotly_chart(fig_top5_Family, use_container_width=True)
 
         #Plot the stores
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
@@ -288,6 +290,46 @@ if len(st.session_state) != 0:
         st.write(fig)
 
 
+    if st.session_state.count == 0:
+        print('Rodando o Facebook Prophet')
+        @st.cache()
+        def store(sales_and_stores):
+
+            sales_and_stores = sales_and_stores.rename(columns={'date': 'ds', 'sales':'y'}).drop(columns=["month", "year", "city"])
+            forecasts = {}
+            for store in sales_and_stores['store_nbr'].unique():
+                
+                print(store)
+                
+                # creating a new variable
+                tmp_df_prep = sales_and_stores[sales_and_stores['store_nbr']== store]
+                
+                # Transforming the column in date time
+                tmp_df_prep['ds'] = pd.to_datetime(tmp_df_prep['ds'])
+        
+                # creating a temporary df to the the training and prediction
+                tmp_df = tmp_df_prep.groupby(by='ds').sum().reset_index()
+                
+                
+                # defining the train/test 
+                train = tmp_df.iloc[:1457]
+                test = tmp_df.iloc[1458:]
+                
+                
+                # Instantiating the FB Prophet model
+                model = Prophet(seasonality_mode='multiplicative')
+
+                # fitting the model on the train test
+                model.fit(train)
+                
+                forecasts[store]= model
+            
+            return forecasts
+
+        st.session_state.model_store = store(st.session_state.data_train_merge_stores)
+
+
+
     def page3():
         st.markdown("Prediction based on the store")
         st.write("Let's predict the number of sales in the city", city_selection,
@@ -319,6 +361,53 @@ if len(st.session_state) != 0:
                  store_selection)
         st.write(fig)
 
+        future_store = st.session_state.model_store[store_selection].make_future_dataframe(periods=12, freq='MS')  #period of 12 months
+        forecast_future_store = st.session_state.model_store[store_selection].predict(future_store)
+        forecast_future_store.head()
+
+        fig = st.session_state.model_store[store_selection].plot(forecast_future_store)
+        st.write(fig)
+
+        fig = st.session_state.model_store[store_selection].plot_components(fcst=forecast_future_store)
+        st.write(fig)
+
+    if st.session_state.count == 0:
+        print('Rodando o Facebook Prophet')
+        @st.cache()
+        def family(sales_and_stores):
+            
+            sales_and_stores = sales_and_stores.rename(columns={'date': 'ds', 'sales':'y'}).drop(columns=["month", "year", "city"])
+
+            forecasts = {}
+            for category in sales_and_stores['family'].unique():
+
+                print(category)
+                # creating a new variable
+                tmp_df_prep_2 = sales_and_stores[sales_and_stores['family']== category]
+                
+                # Transforming the column in date time
+                tmp_df_prep_2['ds'] = pd.to_datetime(tmp_df_prep_2['ds'])
+        
+                # creating a temporary df to the the training and prediction
+                tmp_df = tmp_df_prep_2.groupby(by='ds').sum().drop(columns=["store_nbr"]).reset_index()
+                
+                
+                # defining the train/test 
+                train = tmp_df.iloc[:1457]
+                test = tmp_df.iloc[1458:]
+                
+                
+                # Instantiating the FB Prophet model
+                model = Prophet(seasonality_mode='multiplicative')
+
+                # fitting the model on the train test
+                model.fit(train)
+                
+                forecasts[category]= model
+            
+            return forecasts
+
+        st.session_state.model_family = family(st.session_state.data_train_merge_stores)
 
     #def page4():
       #  st.markdown("Prediction based on store and family")
