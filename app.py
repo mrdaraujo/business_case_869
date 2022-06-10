@@ -158,10 +158,10 @@ if len(st.session_state) != 0:
             st.plotly_chart(fig_top5_Stores, use_container_width=True)
         with col3:
             st.text("")
-            # st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
-            #             font-size: 130%;'><strong>Top 5 categories 🛍</strong></h1>", unsafe_allow_html=True)
-            # fig_top5_Family = px.bar(data_frame=st.session_state.data_top5_family, x='category', y='sales', color='category')
-            # st.plotly_chart(fig_top5_Family, use_container_width=True)
+            st. markdown("<h1 style='text-align: center; color: blue;font-family: arial; \
+                        font-size: 130%;'><strong>Top 5 categories 🛍</strong></h1>", unsafe_allow_html=True)
+            fig_top5_Family = px.bar(data_frame=st.session_state.data_top5family, x='category', y='sales', color='category')
+            st.plotly_chart(fig_top5_Family, use_container_width=True)
 
         #Plot the stores
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
@@ -298,32 +298,32 @@ if len(st.session_state) != 0:
             sales_and_stores = sales_and_stores.rename(columns={'date': 'ds', 'sales':'y'}).drop(columns=["month", "year", "city"])
             forecasts = {}
             for store in sales_and_stores['store_nbr'].unique():
-                
+
                 print(store)
-                
+
                 # creating a new variable
                 tmp_df_prep = sales_and_stores[sales_and_stores['store_nbr']== store]
-                
+
                 # Transforming the column in date time
                 tmp_df_prep['ds'] = pd.to_datetime(tmp_df_prep['ds'])
-        
+
                 # creating a temporary df to the the training and prediction
                 tmp_df = tmp_df_prep.groupby(by='ds').sum().reset_index()
-                
-                
-                # defining the train/test 
+
+
+                # defining the train/test
                 train = tmp_df.iloc[:1457]
                 test = tmp_df.iloc[1458:]
-                
-                
+
+
                 # Instantiating the FB Prophet model
                 model = Prophet(seasonality_mode='multiplicative')
 
                 # fitting the model on the train test
                 model.fit(train)
-                
+
                 forecasts[store]= model
-            
+
             return forecasts
 
         st.session_state.model_store = store(st.session_state.data_train_merge_stores)
@@ -375,7 +375,7 @@ if len(st.session_state) != 0:
         print('Rodando o Facebook Prophet')
         @st.cache()
         def family(sales_and_stores):
-            
+
             sales_and_stores = sales_and_stores.rename(columns={'date': 'ds', 'sales':'y'}).drop(columns=["month", "year", "city"])
 
             forecasts = {}
@@ -384,27 +384,27 @@ if len(st.session_state) != 0:
                 print(category)
                 # creating a new variable
                 tmp_df_prep_2 = sales_and_stores[sales_and_stores['family']== category]
-                
+
                 # Transforming the column in date time
                 tmp_df_prep_2['ds'] = pd.to_datetime(tmp_df_prep_2['ds'])
-        
+
                 # creating a temporary df to the the training and prediction
                 tmp_df = tmp_df_prep_2.groupby(by='ds').sum().drop(columns=["store_nbr"]).reset_index()
-                
-                
-                # defining the train/test 
+
+
+                # defining the train/test
                 train = tmp_df.iloc[:1457]
                 test = tmp_df.iloc[1458:]
-                
-                
+
+
                 # Instantiating the FB Prophet model
                 model = Prophet(seasonality_mode='multiplicative')
 
                 # fitting the model on the train test
                 model.fit(train)
-                
+
                 forecasts[category]= model
-            
+
             return forecasts
 
         st.session_state.model_family = family(st.session_state.data_train_merge_stores)
