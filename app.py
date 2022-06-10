@@ -324,6 +324,6 @@ if len(st.session_state) != 0:
 
     page_names_to_funcs[selected_page]()
 
-#Session States
+#Session Statess
 st.session_state.count += 1
 st.write('Count = ', st.session_state.count)
