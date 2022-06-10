@@ -42,7 +42,7 @@ with col_:
     color:white; font-size: 255%;">Analysis and Prediction</p>'
     title_SalesStoreCompanies = '<p style="font-family:arial; \
     background-color:red;text-align:center; \
-    color:white; font-size: 255%;">of sales for store companies</p>'
+    color:white; font-size: 255%;">of sales for grocery retailer</p>'
     st.markdown(title_AnalysisPrediction,unsafe_allow_html=True )
     st.markdown(title_SalesStoreCompanies,unsafe_allow_html=True )
 
@@ -92,53 +92,27 @@ if len(st.session_state) != 0:
     # Create a block on the left - Selection
     # 1st column - Selection of information given by the user
 
-    list_page_name = ['Analysis Page', 'City Prediction', 'Store Prediction', 'Family Prediction']
+    list_page_name = ['Data visualization', 'Sales prediction based on a store', 'Sales prediction based on a category']
     selected_page = st.sidebar.selectbox("Select a page", list_page_name)
 
     with st.sidebar:
-        st.header("Please fill up the information")
+        with st.expander("Fill up the form for your prediction"):
 
-        #Date selection
-        st.subheader('Date selection for analysis')
-        date_selection_analysis = st.date_input("Select a date: ",datetime.datetime.strptime('2013-01', '%Y-%m'))
-        st.write('Selected date for analysis:', date_selection_analysis)
+            #Date selection
+            date_selection_prevision = st.date_input("Select a date: ",datetime.datetime.strptime('2017-01', '%Y-%m'))
 
-        st.subheader('Date selection for prediction')
-        date_selection_prevision = st.date_input("Select a date: ",datetime.datetime.strptime('2017-01', '%Y-%m'))
-        st.write('Selected date for prediction:', date_selection_prevision)
+            #City selection
+            city_selection = st.selectbox('Select a city: ',np.sort(st.session_state.data_train_merge_stores['city'].unique()))
 
-        #City selection
-        st.subheader('City selection')
-        city_selection = st.selectbox('Select a city: ',np.sort(st.session_state.data_train_merge_stores['city'].unique()))
-        st.write('Selected city:', city_selection)
+            #Retrieve store list from city and Store selection
+            array_city_selection_store = np.array(st.session_state.data_train_merge_stores.loc[st.session_state.data_train_merge_stores['city'] == city_selection, 'store_nbr'])
+            array_city_selection_store = pd.DataFrame(array_city_selection_store)
+            array_city_selection_store = array_city_selection_store.drop_duplicates(subset=0).sort_values(by = 0, ascending=True)
+            store_selection = st.selectbox('Select a store from your city: ',array_city_selection_store)
 
-        #Retrieve information from number of store
-        array_city_selection_store = np.array(st.session_state.data_train_merge_stores.loc[st.session_state.data_train_merge_stores['city'] == city_selection, 'store_nbr'])
-        array_city_selection_store = pd.DataFrame(array_city_selection_store)
-        array_city_selection_store = array_city_selection_store.drop_duplicates(subset=0).sort_values(by = 0, ascending=True)
-        #array_city_selection_store = np.array(array_city_selection_store)
-        st.write ('Your city has ',len(array_city_selection_store),
-        ' out of 54 stores')
-        percentage = (len(array_city_selection_store)/Const_Store_nbr)*100
-        percentage = round(percentage, 2)
-        st.write('Your city has ',percentage , '% of stores')
-
-        #Retrieve store list from city and Store selection
-        st.subheader('Store selection')
-        store_selection = st.selectbox('Select a store from your city: ',array_city_selection_store)
-        st.write('Selected store:', store_selection)
-
-        #Family selection
-        df_all_family = pd.DataFrame(st.session_state.data_train_merge_stores['family'].unique())
-        #df_all_family.columns =['family']
-        #df_all_family.index = np.arange(1, len(df_all_family) + 1)
-        family_selection = st.multiselect('Select a list of families for analysis: ',df_all_family)
-        st.write('Selected list:' )
-        st.table(family_selection)
-
-        #Family selection for prediction
-        family_prediction_selection = st.selectbox('Select one family for prediction: ',df_all_family)
-        st.write('Selected family for prediction: ', family_prediction_selection)
+            #Family selection for prediction
+            df_all_family = pd.DataFrame(st.session_state.data_train_merge_stores['family'].unique())
+            family_prediction_selection = st.selectbox('Select a category: ',df_all_family)
 
     def main_page ():
         col_,col1, col2,col__ = st.columns((1,1,3,2))
@@ -153,7 +127,6 @@ if len(st.session_state) != 0:
                         vertical-align: middle ; line-height: 21px\
                     '><strong>Data Visualization</strong></h1>", unsafe_allow_html=True)
             st.write("-------")
-
 
         #Plot the map
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
@@ -170,8 +143,7 @@ if len(st.session_state) != 0:
         #Plot the top 5
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
             vertical-align: middle;\
-            '><strong>II) Your Top 5 ? 🖐🏅 </strong></h1>", unsafe_allow_html=True)
-        #fig = make_subplots(rows=1, cols=2)
+            '><strong>II) Your Top 5 ? 🖐 </strong></h1>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns((1,1,1))
         with col1:
             st.markdown("<h1 style='text-align: center; color: blue;font-family: arial; font-size: 130%;\
@@ -194,89 +166,107 @@ if len(st.session_state) != 0:
         #Plot the stores
         st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
             vertical-align: middle;\
-            '><strong>III) Let's focus on your stores🖐🏅 </strong></h1>", unsafe_allow_html=True)
+            '><strong>III) How many stores do you have ? 🧐   </strong></h1>", unsafe_allow_html=True)
 
-
-        #Create a second part for analysis on stores
-        with st.expander("1.2) General analysis on sales and stores") :
-
-            st.caption("a) Number on stores on each city")
+        col1, col2 = st.columns((1,1))
+        with col1:
             fig = px.pie(st.session_state.df_stores_city, values = 'store_nbr', names = 'city')
             fig.update_traces(textposition='inside', textinfo='percent+label')
-            st.write(fig)
+            fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            with st.expander("Best store on each city ? 🥇") :
+                st.markdown(
+                    """
+                <style>
+                .streamlit-expanderHeader {
+                    font-size: x-large;
+                    text-align: center;
+                    font-family: arial;
+                    color: blue
+                }
+                </style>
+                """,
+                    unsafe_allow_html=True,
+                )
+                fig = px.bar(st.session_state.df_MaxSales_BiggestStore, x='sales', y='store_nbr', color = 'city', orientation='h')
+                fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+                st.plotly_chart(fig, use_container_width=True)
 
-            st.caption("b) Biggest store on each city")
-            fig = px.bar(st.session_state.df_MaxSales_BiggestStore, x='store_nbr', y='sales', color = 'city')
-            st.write(fig)
+        #Plot the family=category
+        st.markdown("<h1 style='text-align: left; color: black;font-family: arial; font-size: 150%;\
+            vertical-align: middle;\
+            '><strong>IV) Which categories do you sell ? 🛒  </strong></h1>", unsafe_allow_html=True)
+        data_family_allyear_plot = st.session_state.data_family_allyear
+        data_family_allyear_plot_From1to10 = data_family_allyear_plot.iloc[0:10,:]
+        #data_family_allyear_plot_From12to21 = data_family_allyear_plot.iloc[11:22,:]
+        data_family_allyear_plot_From23to33 = data_family_allyear_plot.iloc[23:33,:]
 
-            st.caption("c) Sales for top 5 stores")
-            fig = px.bar(st.session_state.df_stores_top_five, x='store_nbr', y='sales', color = 'city')
-            st.write(fig)
-
-            st.caption("d) Sales for all stores on selected city")
-            data_selection_bycity = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['city'] == city_selection]
-            data_selection_bycity = pd.DataFrame(data_selection_bycity.groupby(['store_nbr'])['sales'].sum()).reset_index()
-            data_selection_bycity['store_nbr'] = data_selection_bycity['store_nbr'].astype('string')
-            data_selection_bycity = data_selection_bycity.sort_values('sales',ascending= False)
-            if len(array_city_selection_store) > 1 :
-                fig = px.bar(data_selection_bycity, x ='store_nbr',y='sales', color = 'store_nbr')
-                st.write(fig)
-            elif len(array_city_selection_store) == 1 :
-                st.write('There is only one store in the city that has sold ',int(data_selection_bycity['sales'].sum()),
-                            ' products from 2013 to 2016')
-
-            st.caption("e) Sales on selected store")
-            data_selection_bystore = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr'] == store_selection]
-            data_selection_bystore = data_selection_bystore.groupby(['year'])['sales'].sum().reset_index()
-            data_selection_bystore['year'] = data_selection_bystore['year'].astype('string')
-            fig = px.line(data_selection_bystore, x ='year',y='sales')
-            st.write(fig)
-
-            st.caption("f) Sales on selected store for 12 months")
-            st.write("Analysis for year ", date_selection_analysis.year)
-            data_selection_bymonth_bystore = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr'] == store_selection]
-            data_selection_bymonth_bystore = data_selection_bymonth_bystore[data_selection_bymonth_bystore['year'] == date_selection_analysis.year]
-            data_selection_bymonth_bystore = data_selection_bymonth_bystore.groupby(['month'])['sales'].sum().reset_index()
-            data_selection_bymonth_bystore['month'] = data_selection_bymonth_bystore['month'].astype('string')
-            fig = px.line(data_selection_bymonth_bystore, x ='month',y='sales')
-            st.write(fig)
-
-        with st.expander("1.3) General analysis on sales and families") :
-
-            st.caption("a) Sales each year for all families")
-            fig = plt.figure(figsize=(12,10))
-            sns.lineplot(x='year', y='sales', data=st.session_state.data_family_peryear, hue='family')
-            plt.xticks(rotation=90)
-            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
-            st.pyplot(fig)
-
-            st.caption("b) Total sales for all families for all years")
-            fig = px.bar(data_frame=st.session_state.data_family_allyear, x='category', y='sales', color='category')
-            st.write(fig)
-
-            #st.caption("c) Sales for top 5 families")
-            #fig = px.bar(data_frame=st.session_state.data_top5family, x='family', y='sales', color='family')
-            #st.write(fig)
-
-            st.caption("d) Sales for selected families on all stores")
-            family_selection_df = st.session_state.data_family_peryear[st.session_state.data_family_peryear['family'].isin(family_selection)]
-            family_selection_df['year'] = family_selection_df['year'].astype('string')
-            fig = plt.figure(figsize=(12,10))
-            sns.lineplot(x='year', y='sales', data=family_selection_df, hue = 'family')
-            plt.xticks(rotation=90)
-            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
-            st.pyplot(fig)
-
-            st.caption("e) Sales for selected families on selected store")
-            store_family_selection_df = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr']==store_selection]
-            store_family_selection_df = store_family_selection_df[store_family_selection_df['family'].isin(family_selection)]
-            fig = px.bar(store_family_selection_df, x='family', y='sales', color='family')
-            st.write(fig)
-
+        col1, col2 = st.columns((1,1))
+        with col1:
+            st.markdown("<h1 style='text-align: center; color: blue;font-family: arial; font-size: 130%;\
+            vertical-align: middle;\
+            '><strong>Top 10 categories 👍</strong></h1>", unsafe_allow_html=True)
+            fig1 = px.bar(data_family_allyear_plot_From1to10, x='category', y='sales', color='category')
+            fig1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+            st.plotly_chart(fig1, use_container_width=True)
+        with col2:
+            st.markdown("<h1 style='text-align: center; color: blue;font-family: arial; font-size: 130%;\
+            vertical-align: middle;\
+            '><strong>Bottom 10 categories 👎</strong></h1>", unsafe_allow_html=True)
+            st.text(" ")
+            fig3 = px.funnel(data_family_allyear_plot_From23to33, x='category', y='sales', color='category')
+            fig3.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+            st.plotly_chart(fig3, use_container_width=True)
 
     def page2():
         st.markdown("Prediction based on the city")
         st.write("Let's predict the number of sales for the city ", city_selection, " for 12 months of the year ", date_selection_prevision.year)
+
+
+       # st.caption("d) Sales for all stores on selected city")
+       # data_selection_bycity = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['city'] == city_selection]
+       # data_selection_bycity = pd.DataFrame(data_selection_bycity.groupby(['store_nbr'])['sales'].sum()).reset_index()
+        #data_selection_bycity['store_nbr'] = data_selection_bycity['store_nbr'].astype('string')
+        #data_selection_bycity = data_selection_bycity.sort_values('sales',ascending= False)
+        #if len(array_city_selection_store) > 1 :
+         #   fig = px.bar(data_selection_bycity, x ='store_nbr',y='sales', color = 'store_nbr')
+          #  st.write(fig)
+        #elif len(array_city_selection_store) == 1 :
+         #   st.write('There is only one store in the city that has sold ',int(data_selection_bycity['sales'].sum()),
+          #              ' products from 2013 to 2016')
+
+        #st.caption("e) Sales on selected store")
+        #data_selection_bystore = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr'] == store_selection]
+        #data_selection_bystore = data_selection_bystore.groupby(['year'])['sales'].sum().reset_index()
+        #data_selection_bystore['year'] = data_selection_bystore['year'].astype('string')
+        #fig = px.line(data_selection_bystore, x ='year',y='sales')
+        #st.write(fig)
+
+        #st.caption("f) Sales on selected store for 12 months")
+        #st.write("Analysis for year ", date_selection_analysis.year)
+        #data_selection_bymonth_bystore = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr'] == store_selection]
+        #data_selection_bymonth_bystore = data_selection_bymonth_bystore[data_selection_bymonth_bystore['year'] == date_selection_analysis.year]
+        #data_selection_bymonth_bystore = data_selection_bymonth_bystore.groupby(['month'])['sales'].sum().reset_index()
+        #data_selection_bymonth_bystore['month'] = data_selection_bymonth_bystore['month'].astype('string')
+        #fig = px.line(data_selection_bymonth_bystore, x ='month',y='sales')
+        #st.write(fig)
+
+        #st.caption("d) Sales for selected families on all stores")
+        #family_selection_df = st.session_state.data_family_peryear[st.session_state.data_family_peryear['family'].isin(family_selection)]
+        #family_selection_df['year'] = family_selection_df['year'].astype('string')
+        #fig = plt.figure(figsize=(12,10))
+        #sns.lineplot(x='year', y='sales', data=family_selection_df, hue = 'family')
+        #plt.xticks(rotation=90)
+        #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
+        #st.pyplot(fig)
+
+        #st.caption("e) Sales for selected families on selected store")
+        #store_family_selection_df = st.session_state.data_train_merge_stores[st.session_state.data_train_merge_stores['store_nbr']==store_selection]
+        #store_family_selection_df = store_family_selection_df[store_family_selection_df['family'].isin(family_selection)]
+        #fig = px.bar(store_family_selection_df, x='family', y='sales', color='family')
+        #st.write(fig)
+
 
         def API_City(year, city):
             year_list=[year]*12
@@ -419,62 +409,46 @@ if len(st.session_state) != 0:
 
         st.session_state.model_family = family(st.session_state.data_train_merge_stores)
 
+    #def page4():
+      #  st.markdown("Prediction based on store and family")
+       # st.write("Let's predict the number of sales in the city ", city_selection, " for the store ", store_selection,
+        #         " for 12 months of the year ", date_selection_prevision.year,
+         #           "for the family ", family_prediction_selection)
 
-    def page4():
-        st.markdown("Prediction based on store and family")
-        st.write("Let's predict the number of sales in the city ", city_selection, " for the store ", store_selection,
-                 " for 12 months of the year ", date_selection_prevision.year,
-                    "for the family ", family_prediction_selection)
+        #def API_Family(year, city, store_nbr, family):
+         #   year_list=[year]*12
+          #  city_list=[city]*12
+           # store_list=[store_nbr]*12
+            #family_list = [family]*12
 
-        def API_Family(year, city, store_nbr, family):
-            year_list=[year]*12
-            city_list=[city]*12
-            store_list=[store_nbr]*12
-            family_list = [family]*12
+           # params = {
+            #    'year': year_list,
+             #   'month': Const_month_predict,
+              #  'city': city_list,
+               # 'store_nbr': store_list,
+                #'family': family_list
+           # }
+            #response = requests.get(Const_url_predict_family, params=params)
+            #return response.json()
 
-            params = {
-                'year': year_list,
-                'month': Const_month_predict,
-                'city': city_list,
-                'store_nbr': store_list,
-                'family': family_list
-            }
-            response = requests.get(Const_url_predict_family, params=params)
-            return response.json()
-
-        family_return = pd.DataFrame(API_Family(date_selection_prevision.year, city_selection, store_selection, family_prediction_selection)).reset_index()
-        family_return.rename(columns = {'index':'month', 'sales_family_year':'sales'}, inplace = True)
-        family_return['month'] = family_return['month'].astype('int')
-        family_return = family_return.sort_values(by = 'month', ascending=True)
-        st.write("Dataframe Prediction 12 months in year ", date_selection_prevision.year, "for city " , city_selection, " and store ",
-                 store_selection, " and family ", family_prediction_selection)
-        st.dataframe(family_return)
-        fig = px.line(family_return, x ='month',y='sales')
-        st.write("Plot Prediction for 12 months in year ", date_selection_prevision.year, "for city " , city_selection, " and store ",
-                 store_selection, " and family ", family_prediction_selection)
-        st.write(fig)
-        st.write("Facebook Prophet")
-        
-        
-        future = st.session_state.model_family[family_prediction_selection].make_future_dataframe(periods=12, freq='MS')  #period of 12 months
-        forecast_future = st.session_state.model_family[family_prediction_selection].predict(future)
-        forecast_future.head()
-        
-        fig = st.session_state.model_family[family_prediction_selection].plot(forecast_future)
-        st.write(fig)
-
-        fig = st.session_state.model_family[family_prediction_selection].plot_components(fcst=forecast_future)
-        st.write(fig)
-
-
+        #family_return = pd.DataFrame(API_Family(date_selection_prevision.year, city_selection, store_selection, family_prediction_selection)).reset_index()
+        #family_return.rename(columns = {'index':'month', 'sales_family_year':'sales'}, inplace = True)
+        #family_return['month'] = family_return['month'].astype('int')
+        #family_return = family_return.sort_values(by = 'month', ascending=True)
+        #st.write("Dataframe Prediction 12 months in year ", date_selection_prevision.year, "for city " , city_selection, " and store ",
+        #         store_selection, " and family ", family_prediction_selection)
+        #st.dataframe(family_return)
+        #fig = px.line(family_return, x ='month',y='sales')
+        #st.write("Plot Prediction for 12 months in year ", date_selection_prevision.year, "for city " , city_selection, " and store ",
+         #        store_selection, " and family ", family_prediction_selection)
+        #st.write(fig)
 
 
     #Code to have different page on streamlit
     page_names_to_funcs = {
-        "Analysis Page" : main_page,
-        "City Prediction": page2,
-        "Store Prediction": page3,
-        "Family Prediction": page4
+        "Data visualization" : main_page,
+        "Sales prediction based on a store": page2,
+        "Sales prediction based on a category": page3,
     }
 
     page_names_to_funcs[selected_page]()
