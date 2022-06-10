@@ -9,17 +9,9 @@ numpy
 pandas
 scikit-learn==1.0.2
 
-# tests/linter
-black
-coverage
-flake8
-pytest
-yapf
-
 # API
 gcsfs
 google-cloud-storage
-mlflow
 s3fs
 uvicorn==0.17.6
 fastapi==0.78.0
@@ -27,8 +19,6 @@ fastapi==0.78.0
 # utilities
 six>=1.14
 joblib
-memoized-property
-termcolor
 fsspec     #needed to import csv files straight from the GCP
 gcsfs      #needed to import csv files straight from the GCP
 
@@ -38,5 +28,8 @@ streamlit
 matplotlib
 plotly
 seaborn
+pystan==2.19.1.1
 fbprophet
+
+
 
